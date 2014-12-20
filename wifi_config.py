@@ -11,6 +11,10 @@ sniffer_mac_beginning = ['00:c0:ca']
 
 real_network = 'Shearer wireless'
 
+DEBUG=True
+
+mons = {}
+
 def startswith_any(value,arr):
 	for checkme in arr:
 		if value.startswith(checkme):
@@ -23,7 +27,7 @@ def get_wlan_ifaces():
 def get_mon_ifaces():
 	return filter(lambda iface:iface.startswith('mon'),netifaces.interfaces())
 
-def mac_to_iface():
+def iface_to_mac():
 	mapping = {}
 	for iface in get_wlan_ifaces():
 		link_addr = netifaces.ifaddresses(iface)
@@ -31,18 +35,18 @@ def mac_to_iface():
 	return mapping
 
 def get_real_card():
-	mac_ifaces = mac_to_iface()
+	mac_ifaces = iface_to_mac()
 	real_iface = None
 
 	for iface in mac_ifaces:
 		mac = mac_ifaces[iface]
-		if !startswith_any(mac,sniffer_mac_beginning):
+		if not startswith_any(mac,sniffer_mac_beginning):
 			real_iface = iface
 			break
 	return real_iface
 
 def get_sniffing_cards():
-	mac_ifaces = mac_to_iface()
+	mac_ifaces = iface_to_mac()
 	sniff_ifaces = []
 
 	for iface in mac_ifaces:
@@ -54,6 +58,10 @@ def get_sniffing_cards():
 def get_lines(cmd):
 	if(type(cmd)==str):
 		cmd = cmd.split(' ')
+
+	if DEBUG:
+		print '[exec]: '+' '.join(cmd)
+
 	proc = Popen(cmd, stdout=PIPE, stderr=DN)
 	return proc.communicate()[0].split('\n')
 
@@ -62,17 +70,25 @@ def stop_monitor_all():
 		stop_monitor_mode(mon)
 
 def stop_monitor_mode(mon):
+	if mon in mons:
+		stop_monitor_mode(mons[mon])
+		del mons[mon]
+
 	get_lines('airmon-ng stop '+mon)
+	if not mon.startswith('mon'):
+		get_lines('ifconfig '+mon+' up')
 
 def start_monitor_mode(device):
+	get_lines('ifconfig '+device+' down')
 	for line in get_lines('airmon-ng start '+device):
 		if '(monitor mode enabled on' in line:
 			mon = line.split('(monitor mode enabled on ')[1][:-1]
 			if mon.startswith('mon'):
+				mons[mon] = device
 				return mon
 			else:
 				raise Exception('Error parsing line: '+line)
-	return None
+	raise Exception('Error starting monitor mode on: '+device)
 
 def setup_real_card():
 	real_card = get_real_card()
@@ -89,6 +105,16 @@ def setup_real_card():
 		setup_real_card()
 
 def setup_monitors():
-	Get sniffing cards
-	Start monitor on all the cards, store which monx is associated to which card, MAC
-	Start a process for each monx, write subprocess module
+	stop_monitor_all()
+	sniff_ifaces = get_sniffing_cards()
+	mac_mapping = iface_to_mac()
+	monitors = []
+
+	for sniffer in sniff_ifaces:
+		monitors.append({
+							'mon': start_monitor_mode(sniffer),
+							'iface': sniffer,
+							'mac': mac_mapping[sniffer]
+						})
+
+	return monitors
