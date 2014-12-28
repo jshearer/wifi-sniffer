@@ -2,16 +2,10 @@ import netifaces
 import wifi
 from subprocess import Popen, call, PIPE
 import os
+from config import sniffer_mac_beginning, DEBUG, real_network
 
 #/dev/null
 DN = open(os.devnull, 'w')
-
-#Alfa MAC addr prefix
-sniffer_mac_beginning = ['00:c0:ca']
-
-real_network = 'Shearer wireless'
-
-DEBUG=True
 
 mons = {}
 

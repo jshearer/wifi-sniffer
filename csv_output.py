@@ -1,6 +1,7 @@
 import csv
 
-#Fake data
+# make_csv(['monitor','transmitter','time','strength'],sniff_data_local,filename)
+# Fake data
 points = [{'monitor':'asdfasdf','transmitter':'dsafdfsa','strength':-24},
 		  {'monitor':'asdfasdf','transmitter':'dsafdfa','strength':-21},
 		  {'monitor':'asdfasdf','transmitter':'dsafdf','strength':-26},
