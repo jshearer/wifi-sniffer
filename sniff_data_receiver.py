@@ -6,7 +6,7 @@ def start_listening():
 		print "NEW DATA POINT: "+str(message)
 
 	redis_queue = r.pubsub(ignore_subscribe_messages=True)
-	redis_queue.subscribe("sniff", "sniff-info")
+	redis_queue.subscribe("sniff", "sniff_info")
 
 	print "Listening for messages"
 
