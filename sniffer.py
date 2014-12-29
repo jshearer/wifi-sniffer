@@ -42,6 +42,7 @@ def start_sniffing():
 
 	for monitor in mons:
 		print 'Starting sniffing on [%s]'%monitor['mon']
+		r.publish('sniff_info', "Starting to sniff, smells good!")
 		proc = Process(target=sniff_me,args=(monitor,))
 		proc.start()
 		proc_list.append(proc)
