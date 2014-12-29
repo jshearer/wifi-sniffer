@@ -56,3 +56,4 @@ target/
 *.csv
 *.gnumeric
 *.pcapng
+*.swp
