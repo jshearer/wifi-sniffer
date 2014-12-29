@@ -58,12 +58,9 @@ def start_sniffing():
 			print 'Complete. Closing down monitor mode.'
 			stop_monitor_all()
 
-			redis_queue.close()
-
 			sys.exit(0)
 		except KeyboardInterrupt:
 			print 'Ok ok, quitting'
-			redis_queue.close()
 			sys.exit(0)
 
 	signal.signal(signal.SIGINT,ctrl_c_handler)
