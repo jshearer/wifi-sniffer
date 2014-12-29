@@ -42,7 +42,9 @@ def start_sniffing():
 
 	for monitor in mons:
 		print 'Starting sniffing on [%s]'%monitor['mon']
-		r.publish('sniff_info', "Starting to sniff, smells good!")
+
+		r.publish('sniff_info', "Starting to sniff on "+monitor['mon']+", smells good!")
+
 		proc = Process(target=sniff_me,args=(monitor,))
 		proc.start()
 		proc_list.append(proc)
@@ -50,6 +52,9 @@ def start_sniffing():
 	def ctrl_c_handler(signal,frame):
 		try:
 			print 'Stopping sniff.'
+
+			for monitor in mons:
+				r.publish('sniff_info', 'Stopping sniffing on '+monitor['mon']+'. Yum.')
 
 			print 'Forcing %i cards to stop sniffing.'%len(proc_list)
 
