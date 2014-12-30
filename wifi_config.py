@@ -87,14 +87,16 @@ def start_monitor_mode(device):
 def setup_real_card():
 	real_card = get_real_card()
 	if not real_card:
-		raise Exception('No non-Alfa card found.') 
+		raise Exception('No non-Alfa card found.')
+
+	get_lines('ifconfig '+real_card+' up')
 
 	connection_scheme = wifi.Scheme.find(real_card,real_network)
 	if connection_scheme:
 		connection_scheme.activate()
 	else:
 		acceptable_cell = wifi.Cell.where(real_card,lambda cell:cell.ssid==real_network)
-		connection_scheme = wifi.Scheme.for_cell(real_card,real_network,acceptable_cell)
+		connection_scheme = wifi.Scheme.for_cell(real_card,real_network,acceptable_cell[0])
 		connection_scheme.save()
 		setup_real_card()
 
