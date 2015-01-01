@@ -9,7 +9,7 @@ import signal
 import os
 from scapy.all import *
 
-def sniff_me(monitor):
+def sniff_me(monitor, queue):
 
 	def PacketHandler(pkt):
 		if pkt.haslayer(UDP) and pkt.load=='Hello world!' and pkt.addr3.startswith('ff'):
@@ -25,12 +25,29 @@ def sniff_me(monitor):
 
 			#It might be addr1?
 			dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
-			r.publish('sniff',dat)
+			queue.put(dat)
 	
 	sniff(iface=monitor['mon'],prn=PacketHandler)
 
+def handle_single_queue_elem(queue):
+	try:
+		elem = queue.get(False)
+		r.publish('sniff', elem)
+		print "Remaining: "+str(queue.qsize())
+		return True
+	except q.Empty:
+		return False
+
+def handle_all_queue_elems(queue):
+	is_more = handle_single_queue_elem(queue)
+	while is_more:
+		is_more = handle_single_queue_elem(queue)
+
+
 def start_sniffing():
 	proc_list = []
+
+	data_queue = Queue()
 
 	mons = setup_monitors()
 
@@ -45,13 +62,15 @@ def start_sniffing():
 
 		r.publish('sniff_info', "Starting to sniff on "+monitor['mon']+", smells good!")
 
-		proc = Process(target=sniff_me,args=(monitor,))
+		proc = Process(target=sniff_me,args=(monitor,data_queue))
 		proc.start()
 		proc_list.append(proc)
 
 	def ctrl_c_handler(signal,frame):
 		try:
-			print 'Stopping sniff.'
+			print 'Stopping sniff. Approximate queue size: '+str(data_queue.qsize())
+
+			handle_all_queue_elems(data_queue)
 
 			for monitor in mons:
 				r.publish('sniff_info', 'Stopping sniffing on '+monitor['mon']+'. Yum.')
@@ -72,7 +91,8 @@ def start_sniffing():
 	signal.signal(signal.SIGINT,ctrl_c_handler)
 
 	while True:
-		time.sleep(1)
+		handle_single_queue_elem(data_queue)
+		time.sleep(0.001)
 
 if __name__=='__main__':
 	if os.geteuid()==0:

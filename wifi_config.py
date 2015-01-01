@@ -75,7 +75,6 @@ def stop_monitor_mode(mon):
 def set_device_channel(device,channel):
 	get_lines('iwconfig '+device+' channel '+str(channel))
 
-
 def start_monitor_mode(device):
 	get_lines('ifconfig '+device+' down')
 	for line in get_lines('airmon-ng start '+device):
