@@ -1,4 +1,5 @@
-from multiprocessing import Manager, Process, Queue
+from multiprocessing import Manager, Process
+import multiprocessing
 import Queue as q
 from wifi_config import setup_real_card,setup_monitors,stop_monitor_all
 from csv_output import make_csv
@@ -47,7 +48,7 @@ def handle_all_queue_elems(queue):
 def start_sniffing():
 	proc_list = []
 
-	data_queue = Queue()
+	data_queue = multiprocessing.Queue()
 
 	mons = setup_monitors()
 
