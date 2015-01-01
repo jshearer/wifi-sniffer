@@ -14,15 +14,10 @@ import Queue as q
 class STDInRawPcapReader(RawPcapReader):
 	def __init__(self,input_file):
 		self.f = input_file
-		self.f.read(8) #8 junk bytes
-		magic_bytes = self.f.read(4)
-		magic = ""
-		for ch in magic_bytes:
-			magic += hex(ord(ch))
-
-		if magic == "x1a0x2b0x3c0x4d": #big endian
+		magic = self.f.read(4)
+		if magic == "\xa1\xb2\xc3\xd4": #big endian
 			self.endian = ">"
-		elif  magic == "0x4d0x3c0x2b0x1a": #little endian
+		elif  magic == "\xd4\xc3\xb2\xa1": #little endian
 			self.endian = "<"
 		else:
 			raise Scapy_Exception("Not a pcap capture file (bad magic)")
@@ -42,9 +37,7 @@ class STDInPcapReader(STDInRawPcapReader):
 			warning("PcapReader: unknown LL type [%i]/[%#x]. Using Raw packets" % (self.linktype,self.linktype))
 			self.LLcls = conf.raw_layer
 	def read_packet(self, size=MTU):
-		print "Reading packet"
 		rp = STDInRawPcapReader.read_packet(self,size)
-		print rp
 		if rp is None:
 			return None
 		s,(sec,usec,wirelen) = rp
@@ -68,7 +61,6 @@ class STDInPcapReader(STDInRawPcapReader):
 
 def sniff_me(monitor, queue):
 	def PacketHandler(pkt):
-		print "Got packet"
 		if pkt.haslayer(UDP) and pkt.load=='Hello world!' and pkt.addr3.startswith('ff'):
 			try:
 				extra = pkt.notdecoded
@@ -83,6 +75,7 @@ def sniff_me(monitor, queue):
 			#It might be addr1?
 			dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
 			queue.put(dat)
+			print "Got packet"
 
 	tshark_proc = Popen(['dumpcap', '-i'+monitor['mon'], '-f', 'udp port 9001', '-P', '-w', '-'], stdout=PIPE)
 	time.sleep(1)
@@ -92,7 +85,7 @@ def sniff_me(monitor, queue):
 
 	while True:
 		if pkt != None:
-			PacketHandler(packet)
+			PacketHandler(pkt)
 		pkt = reader.read_packet()
 		time.sleep(0.001)
 
