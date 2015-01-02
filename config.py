@@ -7,4 +7,5 @@ DEBUG=True
 root_dir = '/home/joseph/sniffer/'
 
 r = redis.StrictRedis(host='localhost', port=6379)
+r.ping()
 

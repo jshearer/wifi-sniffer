@@ -8,33 +8,12 @@ import time
 import sys
 import signal
 import os
-from scapy.all import *
-
-def sniff_me(monitor, queue):
-
-	def PacketHandler(pkt):
-		if pkt.haslayer(UDP) and pkt.load=='Hello world!' and pkt.addr3.startswith('ff'):
-			try:
-				extra = pkt.notdecoded
-			except:
-				extra = None
-			if extra!=None:
-				signal_strength = -(256-ord(extra[-4:-3]))
-			else:
-				signal_strength = -255
-				print 'No signal strength found'
-
-			#It might be addr1?
-			dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
-			queue.put(dat)
-	
-	sniff(iface=monitor['mon'],prn=PacketHandler)
 
 def handle_single_queue_elem(queue):
 	try:
 		elem = queue.get(False)
 		r.publish('sniff', elem)
-		print "Remaining: "+str(queue.qsize())
+		#print "Remaining: "+str(queue.qsize())
 		return True
 	except q.Empty:
 		return False
@@ -57,6 +36,15 @@ def start_sniffing():
 		sys.exit(0)
 
 	print 'Monitors are: %s'%mons
+
+	method = raw_input('Which method would you like to use to sniff ([d]umpcap,[s]capy): ')
+
+	if method.startswith('d'):
+		from dumpcap_sniffer import sniff_me
+	elif method.startswith('s'):
+		from scapy_sniffer import sniff_me
+	else:
+		raise Exception('Sniffing method must start with either \'d\' or \'s\'')
 
 	for monitor in mons:
 		print 'Starting sniffing on [%s]'%monitor['mon']

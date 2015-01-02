@@ -1,10 +1,14 @@
+import sys
+sys.path.append('../')
+
 from config import r
 import time
+from data_handler import handle_new_data
+from pony.orm import db_session
+
+DELAY = 0.001
 
 def start_listening():
-	def new_datapoint(message):
-		print "NEW DATA POINT: "+str(message)
-
 	redis_queue = r.pubsub(ignore_subscribe_messages=True)
 	redis_queue.subscribe("sniff", "sniff_info")
 
@@ -14,9 +18,15 @@ def start_listening():
 		#Poll for messages. If they show up, it'll call new_datapoint
 		msg = redis_queue.get_message()
 		while msg is not None:
-			new_datapoint(msg)
+			if msg['channel']=='sniff_info':
+				print msg['data']
+			else:
+				msg['data'] = eval(msg['data'])
+				with db_session:
+					handle_new_data(msg)
+
 			msg = redis_queue.get_message()
-		time.sleep(0.0001)
+		time.sleep(DELAY)
 
 if __name__ == "__main__":
 	start_listening()
