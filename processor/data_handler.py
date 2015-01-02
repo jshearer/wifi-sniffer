@@ -71,6 +71,7 @@ def calculate_new_positions(recordings):
 		try:
 			pos,uncertainty = find_common_center(recordings)
 			transmitter = get(tr for tr in Transmitter if tr.mac_addr==transmitter_mac)
-			pos = CalculatedPosition(time=datetime.fromtimestamp(time()),transmitter=transmitter,uncertainty=uncertainty,x=pos.x,y=pos.y,z=0)
+			calc_pos = CalculatedPosition(time=datetime.fromtimestamp(time()),transmitter=transmitter,uncertainty=uncertainty,x=pos.x,y=pos.y,z=0)
+			print "Calculated position for "+str(transmitter.name)+" at: ("+str(round(float(pos.x),3))+","+str(round(float(pos.y),3))+"), uncertainty: "+str(round(float(uncertainty)))+"."
 		except TypeError as e:
-			print "Something went wrong and the circles didn't overlap at all: "+e
+			print "Something went wrong or the circles didn't overlap at all: "+str(e)
