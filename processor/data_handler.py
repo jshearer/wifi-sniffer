@@ -1,10 +1,12 @@
 from data import *
 from pony.orm import *
 from datetime import datetime
-from intersector import find_common_center
+from intersector import find_common_center, jsonifiy_data
+import json
 from time import time
+from config import r
 
-max_buffer_size = 100
+max_buffer_size = 10
 buf = []
 
 def handle_new_data(data):
@@ -29,6 +31,7 @@ def handle_new_data(data):
 		nickname = raw_input("What would you like to nickname the transmitter with MAC address '"+str(data['data']['transmitter'])+"': ")
 		transmitter = Transmitter(mac_addr=data['data']['transmitter'],name=nickname)
 		print nickname+" created."
+		commit()
 
 	#If receiver is not found, you guessed it: make one!
 	if not receiver:
@@ -39,6 +42,7 @@ def handle_new_data(data):
 		receiver = Receiver(name=nickname,mac_addr=data['data']['monitor'],x=x,y=y,z=0)
 
 		print nickname+" created."
+		commit()
 
 	recording = Recording(	receiver=receiver,
 							transmitter=transmitter,
@@ -46,6 +50,7 @@ def handle_new_data(data):
 							data=data['data']['data'],
 							time=datetime.fromtimestamp(data['data']['time'])
 						 )
+	rollback()
 	buf.append(recording)
 
 	if len(buf)>max_buffer_size:
@@ -67,11 +72,13 @@ def calculate_new_positions(recordings):
 	#import pdb;pdb.set_trace()
 
 	for transmitter_mac,recordings in transmitters.items():
-		
-		try:
-			pos,uncertainty = find_common_center(recordings)
+		data = find_common_center(recordings,more_data=True)
+		pos,uncertainty = data['pos'],data['uncertainty']
+
+		if pos:
 			transmitter = get(tr for tr in Transmitter if tr.mac_addr==transmitter_mac)
 			calc_pos = CalculatedPosition(time=datetime.fromtimestamp(time()),transmitter=transmitter,uncertainty=uncertainty,x=pos.x,y=pos.y,z=0)
 			print "Calculated position for "+str(transmitter.name)+" at: ("+str(round(float(pos.x),3))+","+str(round(float(pos.y),3))+"), uncertainty: "+str(round(float(uncertainty)))+"."
-		except TypeError as e:
-			print "Something went wrong or the circles didn't overlap at all: "+str(e)
+
+		r.publish('positioning',jsonifiy_data(data))
+		

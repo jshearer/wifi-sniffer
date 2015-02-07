@@ -64,7 +64,6 @@ def find_common_center(recordings, mode='avg', more_data = False):
 
 		circles[transmitter] = Circle(Point(x,y),abs(radius))
 
-
 	# Find all circle intersection points, store in set
 	intersects = set()
 	#For each permutation of circles, two at a time
@@ -75,8 +74,8 @@ def find_common_center(recordings, mode='avg', more_data = False):
 
 	# For each circle, prune all points not inside, inclusive (including points on the edge of the circle)
 	for circle in circles.values():
-		for intersection in intersects:
-			if circle.center.distance(intersection)>circle.radius:
+		for intersection in set(intersects):
+			if float(circle.center.distance(intersection))>float(circle.radius):
 				intersects.discard(intersection)
 
 	# If points remaining>=3, create polygon from points, get polygon's area and centroid. That is predicted position, uncertainty
@@ -87,24 +86,59 @@ def find_common_center(recordings, mode='avg', more_data = False):
 	uncertainty_shape = None
 	if len(intersects)>=3:
 		poly = Polygon(*intersects)
-		ret = (poly.centroid(),poly.perimiter())
+		ret = (poly.centroid,poly.area)
 
 		uncertainty_shape = poly
 	elif len(intersects)==2:
 		seg = Segment(*intersects)
 		circ = Circle(seg.midpoint,seg.length/2.0)
-		ret = (circ.center,circ.circumference)
+		ret = (circ.center,circ.area)
 
 		uncertainty_shape = seg
 	elif len(intersects)==1:
 		ret = (intersects.pop(),0)
 	else:
-		ret = None
+		ret = (None,None)
 
 	if more_data:
-		return {'receivers':circles,'intersects':intersects,'uncertainty_shape':uncertainty_shape,'data':ret}
+		return {'receivers':circles,'intersects':intersects,'uncertainty_shape':uncertainty_shape,'pos':ret[0],'uncertainty':ret[1]}
 	else:
 		return ret
+
+def jsonifiy_data(more_data):
+
+	def jsonify_point(pt):
+		if not pt:
+			return {'x':0,'y':0}
+
+		return {'x':float(pt.x),'y':float(pt.y)}
+
+	def jsonify_circle(cr):
+		return {'center':jsonify_point(cr.center),'radius':float(cr.radius)}
+
+	def jsonify_polygon(po):
+		return [jsonify_point(vertex) for vertex in po.vertices]
+
+	def jsonify_segment(se):
+		return [jsonify_point(se.p1),jsonify_point(se.p2)]
+
+	jsonified_data = {}
+
+	jsonified_data['receivers'] = [jsonify_circle(cr) for cr in more_data['receivers'].values()]
+	jsonified_data['intersects'] = [jsonify_point(pt) for pt in more_data['intersects']]
+	if type(more_data['uncertainty_shape']) is Polygon:
+		jsonified_data['uncertainty_shape'] = jsonify_polygon(more_data['uncertainty_shape'])
+	elif type(more_data['uncertainty_shape']) is Segment:
+		jsonified_data['uncertainty_shape'] = jsonify_segment(more_data['uncertainty_shape'])
+	else:
+		jsonified_data['uncertainty_shape'] = None
+
+	jsonified_data['pos'] = jsonify_point(more_data['pos'])
+	jsonified_data['uncertainty'] = float(more_data['uncertainty'] or 0)
+
+	return jsonified_data
+
+
 
 #TODO: Implement a function to fitler by transmitter. For the moment only one tramsitter exists
 #so it won't be too much of an issue
