@@ -1,9 +1,9 @@
+from subprocess import Popen, call, PIPE
 import netifaces
 import wifi
-from subprocess import Popen, call, PIPE
 import os
-from config import sniffer_mac_beginning, DEBUG, real_network
 
+from config import sniffer_mac_beginning, DEBUG, real_network
 #/dev/null
 DN = open(os.devnull, 'w')
 

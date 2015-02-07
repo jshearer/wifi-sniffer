@@ -1,4 +1,5 @@
 from scapy.all import sniff
+
 from sniffing import PacketHandler
 
 def sniff_me(monitor, queue):

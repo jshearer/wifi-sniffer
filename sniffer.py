@@ -1,13 +1,14 @@
 from multiprocessing import Manager, Process
 import multiprocessing
 import Queue as q
-from wifi_config import setup_real_card,setup_monitors,stop_monitor_all
-from csv_output import make_csv
-from config import r
 import time
 import sys
 import signal
 import os
+
+from wifi_config import setup_real_card,setup_monitors,stop_monitor_all
+from csv_output import make_csv
+from config import r
 
 def handle_single_queue_elem(queue):
 	try:

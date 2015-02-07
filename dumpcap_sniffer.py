@@ -1,5 +1,6 @@
 from scapy.all import *
 from subprocess import Popen, PIPE
+
 from sniffing import PacketHandler
 
 class STDInRawPcapReader(RawPcapReader):
