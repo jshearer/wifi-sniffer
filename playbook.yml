@@ -1,0 +1,38 @@
+---
+
+- name: Tasks that will run on each raspberry pi after being ansible-pull'd
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    git_repo: ssh://....git
+    working_dir: /var/wiloc
+
+    server_endpoint: http://api.josephshearer.net/wiloc/api/v1
+
+    user: root
+    daemon: {{working_dir}}/sniffing/sniffer_launch.py
+    pidfile: /var/run/{{service_name}}.pid
+    daemon_opts: "--endpoint {{server_endpoint}} --mode dumpcap --pidfile {{pidfile}}"
+    service_name: sniffer
+
+  tasks:
+
+    - name: Ensure working directory exists.
+      file: path={{working_dir}} state=directory
+    
+    - name: Clone the git repo for 
+      git: repo={{git_repo}} accept_hostkey=yes dest={{working_dir}}
+      register: git_pull
+
+    - name: Stop the sniffing service
+      service: name={{service_name}} state=stopped enabled=no
+      when: git_pull.changed
+
+    - name: Add init.d daemon script
+      template: src=ansible/templates/systemd-template.j2 dest=/etc/systemd/system/multi-user.target.wants/{{service_name}}.service mode=777
+      when: git_pull.changed
+
+    - name: Ensure my daemon is started
+      service: name={{service_name}}.service state=started enabled=yes
+      when: git_pull.changed

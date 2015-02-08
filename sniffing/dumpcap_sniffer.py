@@ -1,5 +1,5 @@
-from scapy.all import *
 from subprocess import Popen, PIPE
+from scapy.all import *
 
 from sniffing import PacketHandler
 

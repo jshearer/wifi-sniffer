@@ -1,6 +1,3 @@
-import sys
-sys.path.append('../')
-
 from config import r
 from pony.orm import db_session
 
@@ -11,7 +8,7 @@ app = Flask(__name__)
 app.debug = True
 socketio = SocketIO(app)
 
-@app.route('/<path:filename>')
+@app.route('/static/<path:filename>')
 def send_foo(filename):
     return send_from_directory('static/', filename)
 

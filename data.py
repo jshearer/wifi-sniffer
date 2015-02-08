@@ -1,7 +1,6 @@
 from datetime import datetime
 from pony.orm import *
-
-db = Database("sqlite", "database.sqlite", create_db=True)
+from config import db
 
 class Receiver(db.Entity):
     id = PrimaryKey(int, auto=True)

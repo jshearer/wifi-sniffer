@@ -6,9 +6,9 @@ import sys
 import signal
 import os
 
-from wifi_config import setup_real_card,setup_monitors,stop_monitor_all
+from wifi_config import setup_monitors,stop_monitor_all
 from csv_output import make_csv
-from config import r
+from WiLoc.config import r
 
 def handle_single_queue_elem(queue):
 	try:
@@ -25,7 +25,7 @@ def handle_all_queue_elems(queue):
 		is_more = handle_single_queue_elem(queue)
 
 
-def start_sniffing():
+def start_sniffing(mode=None):
 	proc_list = []
 
 	data_queue = multiprocessing.Queue()
@@ -38,7 +38,8 @@ def start_sniffing():
 
 	print 'Monitors are: %s'%mons
 
-	method = raw_input('Which method would you like to use to sniff ([d]umpcap,[s]capy): ')
+
+	method = (mode or raw_input('Which method would you like to use to sniff ([d]umpcap,[s]capy): '))
 
 	if method.startswith('d'):
 		from dumpcap_sniffer import sniff_me
@@ -83,9 +84,3 @@ def start_sniffing():
 	while True:
 		handle_single_queue_elem(data_queue)
 		time.sleep(0.001)
-
-if __name__=='__main__':
-	if os.geteuid()==0:
-		start_sniffing()
-	else:
-		raise Exception('You must be root.')

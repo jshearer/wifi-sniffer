@@ -1,10 +1,8 @@
-import sys
-sys.path.append('../')
-
-from config import r
-import time
 from data_handler import handle_new_data
 from pony.orm import db_session
+import time
+
+from WiLoc.config import r
 
 DELAY = 0.01
 

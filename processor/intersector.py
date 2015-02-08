@@ -1,7 +1,8 @@
 from sympy import Point, Circle, Polygon, Segment
 from pony.orm import get, db_session
-from data import Receiver, Recording
 from itertools import permutations
+
+from WiLoc.data import Receiver, Recording
 
 #This function assumes that the data has already been filtered by transmitter's MAC
 #As such, only one transmitter MAC should show up. If more than one exist, that's an error
