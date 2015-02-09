@@ -17,7 +17,7 @@ def PacketHandler(monitor,queue):
 				signal_strength = -(256-ord(extra[-4:-3]))
 			else:
 				signal_strength = -255
-				print 'No signal strength found'
+				logging.warning('No signal strength found')
 
 			#It might be addr1?
 			dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}

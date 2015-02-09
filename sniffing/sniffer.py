@@ -5,15 +5,17 @@ import time
 import sys
 import signal
 import os
+import logging
 
 from wifi_config import setup_monitors,stop_monitor_all
 from csv_output import make_csv
-from WiLoc.config import r
 
 def handle_single_queue_elem(queue):
 	try:
 		elem = queue.get(False)
-		r.publish('sniff', elem)
+		"""
+		HANDLE ELEM HERE
+		"""
 		#print "Remaining: "+str(queue.qsize())
 		return True
 	except q.Empty:
@@ -25,7 +27,7 @@ def handle_all_queue_elems(queue):
 		is_more = handle_single_queue_elem(queue)
 
 
-def start_sniffing(mode=None):
+def start_sniffing(endpoint, mode=None, context=None):
 	proc_list = []
 
 	data_queue = multiprocessing.Queue()
@@ -33,10 +35,10 @@ def start_sniffing(mode=None):
 	mons = setup_monitors()
 
 	if len(mons)<1:
-		print 'No monitor cards found. Exiting.'
+		logging.info('No monitor cards found. Exiting.')
 		sys.exit(0)
 
-	print 'Monitors are: %s'%mons
+	logging.info('Monitors are: %s'%mons)
 
 
 	method = (mode or raw_input('Which method would you like to use to sniff ([d]umpcap,[s]capy): '))
@@ -49,9 +51,7 @@ def start_sniffing(mode=None):
 		raise Exception('Sniffing method must start with either \'d\' or \'s\'')
 
 	for monitor in mons:
-		print 'Starting sniffing on [%s]'%monitor['mon']
-
-		r.publish('sniff_info', "Starting to sniff on "+monitor['mon']+", smells good!")
+		logging.info('Starting sniffing on [%s]'%monitor['mon'])
 
 		proc = Process(target=sniff_me,args=(monitor,data_queue))
 		proc.start()
@@ -59,28 +59,35 @@ def start_sniffing(mode=None):
 
 	def ctrl_c_handler(signal,frame):
 		try:
-			print 'Stopping sniff. Approximate queue size: '+str(data_queue.qsize())
+			logging.info('Stopping sniff. Approximate queue size: '+str(data_queue.qsize()))
 
 			handle_all_queue_elems(data_queue)
 
 			for monitor in mons:
-				r.publish('sniff_info', 'Stopping sniffing on '+monitor['mon']+'. Yum.')
+				logging.info('Stopping sniffing on '+monitor['mon']+'. Yum.')
 
-			print 'Forcing %i cards to stop sniffing.'%len(proc_list)
+			logging.info('Forcing %i cards to stop sniffing.'%len(proc_list))
 
 			for proc in proc_list:
 				proc.terminate()
 
-			print 'Complete. Closing down monitor mode.'
+			logging.info('Complete. Closing down monitor mode.')
 			stop_monitor_all()
 
 			sys.exit(0)
 		except KeyboardInterrupt:
-			print 'Ok ok, quitting'
+			logging.warning('Ok ok, quitting')
 			sys.exit(0)
 
-	signal.signal(signal.SIGINT,ctrl_c_handler)
+	def loop_forever():
+		while True:
+			handle_single_queue_elem(data_queue)
+			time.sleep(0.001)
 
-	while True:
-		handle_single_queue_elem(data_queue)
-		time.sleep(0.001)
+	signal.signal(signal.SIGINT,ctrl_c_handler)
+	if context:
+		logging.info("Daemonizing. Bye bye!")
+		with context:
+			loop_forever()
+	else:
+		loop_forever()

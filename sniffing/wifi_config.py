@@ -1,6 +1,7 @@
 from subprocess import Popen, call, PIPE
 import netifaces
 import os
+import logging
 
 from WiLoc.config import sniffer_mac_beginning, DEBUG, real_network
 #/dev/null
@@ -52,8 +53,7 @@ def get_lines(cmd):
 	if(type(cmd)==str):
 		cmd = cmd.split(' ')
 
-	if DEBUG:
-		print '[exec]: '+' '.join(cmd)
+	logging.info('[exec]: '+' '.join(cmd))
 
 	proc = Popen(cmd, stdout=PIPE, stderr=DN)
 	return proc.communicate()[0].split('\n')
