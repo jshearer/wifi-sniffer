@@ -15,7 +15,7 @@
 			{
 				"enable": true,
 				"ESSID": "linksys",
-				"secutiry": "none",
+				"security": "none",
 				"ip": "dhcp",
 				"hidden": "no"
 			}
@@ -26,7 +26,7 @@
 			{
 				"enable": true,
 				"ESSID": "wpa_test",
-				"secutiry": "wpa",
+				"security": "wpa",
 				"key": "password",
 				"ip": "dhcp",
 				"hidden": "no"
