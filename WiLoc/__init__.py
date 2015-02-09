@@ -35,7 +35,7 @@ elif(os.path.isfile('/var/lib/dbus/machine-id')):
 
 if id_file:
 	with open(id_file,'r') as f:
-		device_id = f.read()
+		device_id = f.read().replace("\n","")
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
 

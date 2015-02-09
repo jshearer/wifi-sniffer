@@ -1,10 +1,12 @@
 import os
+import logging
 
 from config_reader import get_data, get_group
 from WiLoc.sniffing.wifi_config import get_real_card
 
 def setup_wifi():
 	grp = get_group()
+	logging.info("Wifi setup. Group: "+str(grp)+", wifi enabled: "+str(grp['wifi']['enable']))
 
 	if grp and grp['wifi']['enable']:
 		#We assume running arch
