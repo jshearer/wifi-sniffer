@@ -34,3 +34,6 @@ def setup_wifi():
 			wifi_file.write("IP=dhcp\n"%(ssid,))
 			if hidden:
 				wifi_file.write("Hidden=yes\n")
+
+if __name__=="__main__":
+	setup_wifi()

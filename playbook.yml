@@ -28,6 +28,10 @@
     - name: Clone the git repo for 
       git: repo={{git_repo}} accept_hostkey=yes dest={{working_dir}}
       register: git_pull
+
+    - name: Set up wifi correctly
+      command: /usr/bin/python2 -m WiLoc.infrastructure.setup_wifi chdir={{working_dir}}
+      when: git_pull.changed
       tags: update
 
     - name: Stop the sniffing service
@@ -35,12 +39,12 @@
       when: git_pull.changed
       tags: update
 
-    - name: Add init.d daemon script
+    - name: Add daemon script
       template: src=ansible/templates/systemd-template.j2 dest=/etc/systemd/system/multi-user.target.wants/{{service_name}}.service mode=777
       when: git_pull.changed
       tags: update
 
-    - name: Ensure my daemon is started
+    - name: Ensure the daemon is started
       service: name={{service_name}}.service state=started enabled=yes
       when: git_pull.changed
       tags: update
