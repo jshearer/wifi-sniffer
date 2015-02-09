@@ -6,7 +6,7 @@ Type=forking
 Restart=always
 WorkingDirectory={{working_dir}}
 PIDFile={{pidfile}}
-ExecStart=/usr/bin/python2 {{daemon}} {{daemon_opts}}
+ExecStart=/usr/bin/python2 {{daemon}}
 
 [Install]
 WantedBy=multi-user.target
