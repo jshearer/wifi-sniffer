@@ -12,7 +12,6 @@
 
     server_endpoint: http://api.josephshearer.net/wiloc/api/v1
 
-    user: root
     daemon_opts: "--endpoint {{server_endpoint}} --mode dumpcap --pidfile {{pidfile}} --logfile {{logging_dir}}"
     daemon_cmd: "cd {{working_dir}}; /usr/bin/python2 -m WiLoc.sniffing.sniffer_launch {{daemon_opts}}"
     service_name: sniffer
