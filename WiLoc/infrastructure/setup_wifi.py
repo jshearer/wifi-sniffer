@@ -33,7 +33,7 @@ def setup_wifi():
 			if security != 'none':
 				wifi_file.write("Key='%s'\n"%(key,))
 			wifi_file.write("ESSID='%s'\n"%(ssid,))
-			wifi_file.write("IP=dhcp\n"%(ssid,))
+			wifi_file.write("IP=dhcp\n")
 			if hidden:
 				wifi_file.write("Hidden=yes\n")
 
