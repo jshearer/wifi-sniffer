@@ -1,0 +1,5 @@
+docutils==0.12
+lockfile==0.10.2
+netifaces==0.10.4
+pony==0.6
+python-daemon==2.0.5
