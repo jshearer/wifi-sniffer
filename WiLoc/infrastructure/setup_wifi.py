@@ -18,7 +18,7 @@ def setup_wifi():
 		ip = wifi['ip']
 		hidden = (wifi['hidden'] if 'hidden' in wifi else False)
 
-		if security is not 'none':
+		if security is not u'none':
 			key = wifi['key']
 
 		interface = get_real_card()
