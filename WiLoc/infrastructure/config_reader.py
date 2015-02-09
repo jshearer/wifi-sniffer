@@ -1,7 +1,9 @@
 import json
+import os
+
 from WiLoc import device_id
 
-cfg_data = json.loads('config_data.json')
+cfg_data = json.loads(os.path.join(os.path.dirname(os.path.realpath(__file__)),'config_data.json'))
 
 def get_data():
 	if device_id in cfg_data['devices']:

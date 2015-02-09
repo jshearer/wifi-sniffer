@@ -2,6 +2,7 @@ import logging
 from logging import handlers
 import os
 import sys
+import traceback
 
 log_format = logging.Formatter("[%(asctime)s] {%(levelname)s} (%(name)s) %(message)s")
 
