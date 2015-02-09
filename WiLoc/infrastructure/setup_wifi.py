@@ -30,7 +30,7 @@ def setup_wifi():
 			wifi_file.write("Interface=%s\n"%(interface,))
 			wifi_file.write("Connection=wireless\n")
 			wifi_file.write("Security=%s\n"%(security,))
-			if security is not 'none':
+			if security != 'none':
 				wifi_file.write("Key='%s'\n"%(key,))
 			wifi_file.write("ESSID='%s'\n"%(ssid,))
 			wifi_file.write("IP=dhcp\n"%(ssid,))
