@@ -13,7 +13,7 @@ if __name__=='__main__':
 		parser.add_argument('--mode', choices=['dumpcap','scapy'], default='dumpcap')
 		parser.add_argument('--endpoint', required=True)
 		parser.add_argument('--pidfile', required=True)
-		parser.add_argument('--no-daemon', action='store_false', default=True, dest="daemon")
+		parser.add_argument('--daemon', action='store_true', default=False, dest="daemon")
 		parser.add_argument('--stdout')
 		parser.add_argument('--stderr')
 		parser.add_argument('--logfile')
