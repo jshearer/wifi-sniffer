@@ -7,8 +7,8 @@ from WiLoc import device_id
 
 def setup_wifi():
 	host = get('hosts',{'uid':device_id})[0]
-	location = get(host['location'])[0]
-	wifi_settings = get(location['wifi_settings'])[0]
+	location = get(host['location'])
+	wifi_settings = get(location['wifi_settings'])
 
 	logging.info("Wifi setup. Hostname: "+str(host['name'])+" at "+str(location['name'])+", wifi enabled: "+str(wifi_settings['enabled']))
 
