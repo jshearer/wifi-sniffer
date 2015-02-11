@@ -6,7 +6,7 @@ from WiLoc.communication.api import get
 from WiLoc import device_id
 
 def setup_wifi():
-	host = get('hosts',{'uid':device_id})[0]
+	host = get('hosts',{'uid':device_id})['results'][0]
 	location = get(host['location'])
 	wifi_settings = get(location['wifi_settings'])
 
