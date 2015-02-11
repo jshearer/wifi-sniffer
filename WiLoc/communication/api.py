@@ -17,7 +17,7 @@ def get(resource, params=dict()):
 	if not url.endswith('/'):
 		url = url + '/'
 	
-	return requests.get(url,params=params, headers=headers).json()['results']
+	return requests.get(url,params=params, headers=headers).json()
 
 def post(resource, params=dict(), data=dict()):
 
@@ -77,7 +77,7 @@ def new_recording(transmitter,receiver,rssi):
 
 
 def get_host_id(device_id):
-	server_query = get('hosts',{'device_uid':device_id})
+	server_query = get('hosts',{'device_uid':device_id})['results']
 
 	if len(server_query)==1:
 		return server_query[0]['url']
