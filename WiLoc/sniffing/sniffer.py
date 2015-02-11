@@ -14,7 +14,7 @@ from WiLoc.communication import api
 def handle_single_queue_elem(queue):
 	try:
 		elem = queue.get(False)
-		api.new_recording(elem['monitor'],elem['transmitter'],elem['strength'])
+		api.new_recording(elem['transmitter'],elem['monitor'],elem['strength'])
 		return True
 	except q.Empty:
 		return False

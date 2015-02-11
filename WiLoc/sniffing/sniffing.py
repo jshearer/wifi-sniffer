@@ -1,4 +1,5 @@
 from scapy.all import *
+import logging
 #This is a higher order function
 #It's purpose is to allow the packet handle to have other arguments.
 #Speciically, it's used becuase scapy's sniff function doesn't let you pass arguments to the handler
@@ -22,5 +23,8 @@ def PacketHandler(monitor,queue):
 			#It might be addr1?
 			dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
 			queue.put(dat)
+
+			logging.debug("1,2,3: (%s,%s,%s)"%(pkt.addr1,pkt.addr2,pkt.addr3))
+
 
 	return handle
