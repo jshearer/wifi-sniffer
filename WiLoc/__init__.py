@@ -35,13 +35,13 @@ if(os.path.isfile('/etc/machine-id')):
 elif(os.path.isfile('/var/lib/dbus/machine-id')):
 	id_file = '/var/lib/dbus/machine-id'
 
-host_id = api.get_host_id(device_id)
-if host_id is None:
-	raise Exception("Host {%s} doesn't exist in the database! Make it so."%(device_id,))
-
 if id_file:
 	with open(id_file,'r') as f:
 		device_id = f.read().replace("\n","")
+
+host_id = api.get_host_id(device_id)
+if host_id is None:
+	raise Exception("Host {%s} doesn't exist in the database! Make it so."%(device_id,))
 
 def log_uncaught_exceptions(ex_cls, ex, tb):
 
