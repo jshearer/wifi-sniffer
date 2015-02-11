@@ -86,7 +86,7 @@ def new_recording(transmitter,receiver,rssi):
 	recording_buffer.append({'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
 	
 	if time.time()-last_req > req_every:
-		flush_recordings(recording_buffer)
+		flush_recordings()
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
