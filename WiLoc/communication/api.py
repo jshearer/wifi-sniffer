@@ -34,7 +34,7 @@ def get_transmitter_id(mac_addr):
 		return post('transmitters',data={'mac_addr':mac_addr,'name':'Unknown'})['pk']
 
 def get_receiver_id(mac_addr):
-	import WiLoc.host_id as host_id
+	from WiLoc import host_id
 
 	if mac_addr in receiver_mapping:
 		return receiver_mapping[mac_addr]
