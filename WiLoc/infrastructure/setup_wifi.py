@@ -1,25 +1,25 @@
 import os
 import logging
 
-from config_reader import get_data, get_group
 from WiLoc.sniffing.wifi_config import get_real_card
+from WiLoc.communication.api import get
+from WiLoc import device_id
 
 def setup_wifi():
-	grp = get_group()
-	logging.info("Wifi setup. Group: "+str(grp)+", wifi enabled: "+str(grp['wifi']['enable']))
+	host = get('hosts',{'uid':device_id})[0]
+	wifi_settings = get(get(host['location'])[0]['wifi_settings'])[0]
+	logging.info("Wifi setup. Hostname: "+str(host['name'])+", wifi enabled: "+str(wifi_settings['enabled']))
 
-	if grp and grp['wifi']['enable']:
+	if host and wifi_settings['enabled']:
 		#We assume running arch
-
-		wifi = grp['wifi']
-
-		ssid = wifi['ESSID']
-		security = wifi['security']
-		ip = wifi['ip']
-		hidden = (wifi['hidden'] if 'hidden' in wifi else False)
+		
+		ssid = wifi_settings['ESSID']
+		security = wifi_settings['security']
+		ip = wifi_settings['ip']
+		hidden = (wifi_settings['hidden'] if 'hidden' in wifi else False)
 
 		if security != 'none':
-			key = wifi['key']
+			key = wifi_settings['key']
 
 		interface = get_real_card()
 
