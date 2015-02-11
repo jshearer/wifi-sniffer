@@ -68,8 +68,8 @@ def get_receiver_id(mac_addr):
 
 	return None
 
-def flush_recordings():
-	post('recordings',data=recording_buffer)
+def flush_recordings(buf):
+	post('recordings',data=buf)
 	recording_buffer = []
 	last_req = time.time()
 
@@ -83,7 +83,7 @@ def new_recording(transmitter,receiver,rssi):
 	recording_buffer.append({'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
 	
 	if time.time()-last_req > req_every:
-		flush_recordings()
+		flush_recordings(recording_buffer)
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
