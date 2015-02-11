@@ -71,7 +71,7 @@ def new_recording(transmitter,receiver,rssi):
 
 	resp = post('recordings',data={'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
 
-	logging.debug("Created new recording: "+str(resp.text))
+	logging.debug("Created new recording: "+str(resp.content))
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
