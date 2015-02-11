@@ -18,7 +18,7 @@ def setup_wifi():
 		ssid = wifi_settings['ESSID']
 		security = wifi_settings['security']
 		ip = wifi_settings['ip']
-		hidden = (wifi_settings['hidden'] if 'hidden' in wifi else False)
+		hidden = 'yes' if wifi_settings['hidden'] else 'no'
 
 		if security != 'none':
 			key = wifi_settings['key']
