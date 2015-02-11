@@ -63,4 +63,3 @@ def sniff_me(monitor, queue):
 		while pkt != None:
 			PacketHandler(monitor,queue)(pkt)
 			pkt = reader.read_packet()
-		time.sleep(0.001)
