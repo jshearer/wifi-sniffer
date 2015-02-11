@@ -4,6 +4,8 @@ import os
 import sys
 import traceback
 
+import communication.api as api
+
 log_format = logging.Formatter("[%(asctime)s] {%(levelname)s} (%(name)s) %(message)s")
 
 sh = logging.StreamHandler()
@@ -32,6 +34,10 @@ if(os.path.isfile('/etc/machine-id')):
 	id_file = '/etc/machine-id'
 elif(os.path.isfile('/var/lib/dbus/machine-id')):
 	id_file = '/var/lib/dbus/machine-id'
+
+host_id = api.get_host_id(device_id)
+if host_id is None:
+	raise Exception("Host {%s} doesn't exist in the database! Make it so."%(device_id,))
 
 if id_file:
 	with open(id_file,'r') as f:

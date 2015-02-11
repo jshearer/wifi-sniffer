@@ -9,14 +9,12 @@ import logging
 
 from wifi_config import setup_monitors,stop_monitor_all
 from csv_output import make_csv
+from WiLoc.communication import api
 
 def handle_single_queue_elem(queue):
 	try:
 		elem = queue.get(False)
-		"""
-		HANDLE ELEM HERE
-		"""
-		#print "Remaining: "+str(queue.qsize())
+		api.new_recording(elem['monitor'],elem['transmitter'],elem['strength'])
 		return True
 	except q.Empty:
 		return False
