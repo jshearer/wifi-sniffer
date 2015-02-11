@@ -14,7 +14,7 @@ def get(resource, params=dict()):
 	headers = {'Content-type': 'application/json'}
 
 	url = urlparse.urljoin(server_address,resource)
-	if not url.endswidth('/'):
+	if not url.endswith('/'):
 		url = url + '/'
 	
 	return requests.get(url,params=params, headers=headers).json()['results']
@@ -24,7 +24,7 @@ def post(resource, params=dict(), data=dict()):
 	headers = {'Content-type': 'application/json'}
 
 	url = urlparse.urljoin(server_address,resource)
-	if not url.endswidth('/'):
+	if not url.endswith('/'):
 		url = url + '/'
 
 	response = requests.post(url,params=params, data=json.dumps(data), headers=headers)
