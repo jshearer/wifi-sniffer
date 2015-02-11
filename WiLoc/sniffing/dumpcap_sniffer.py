@@ -62,5 +62,4 @@ def sniff_me(monitor, queue):
 	while True:
 		while pkt != None:
 			PacketHandler(monitor,queue)(pkt)
-			pkt = reader.read_packet()
-			logging.info("Read packet!")
+			pkt = reader.read_packet(10000)
