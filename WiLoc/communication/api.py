@@ -10,6 +10,11 @@ transmitter_mapping = {}
 receiver_mapping = {}
 recording_buffer = []
 req_every = 2
+last_req = time.time()
+
+global recording_buffer
+global req_every
+global last_req
 
 def get(resource, params=dict()):
 
@@ -62,8 +67,6 @@ def get_receiver_id(mac_addr):
 		return server_query[0]['url']
 
 	return None
-
-last_req = time.time()
 
 def flush_recordings():
 	post('recordings',data=recording_buffer)
