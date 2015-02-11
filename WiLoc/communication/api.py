@@ -2,11 +2,14 @@ import requests
 import urlparse
 import logging
 import json
+import time
 
 from WiLoc.config import server_address
 
 transmitter_mapping = {}
 receiver_mapping = {}
+recording_buffer = []
+req_every = 2
 
 def get(resource, params=dict()):
 
@@ -60,6 +63,13 @@ def get_receiver_id(mac_addr):
 
 	return None
 
+last_req = time.time()
+
+def flush_recordings():
+	post('recordings',data=recording_buffer)
+	recording_buffer = []
+	last_req = time.time()
+
 def new_recording(transmitter,receiver,rssi):
 	transmitter_id = get_transmitter_id(transmitter)
 	receiver_id = get_receiver_id(receiver)
@@ -67,7 +77,10 @@ def new_recording(transmitter,receiver,rssi):
 	if receiver_id is None:
 		raise Exception("Receiver not in database. Please add: "+str(receiver))
 
-	resp = post('recordings',data={'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
+	recording_buffer.append({'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
+	
+	if time.time()-last_req > req_every:
+		flush_recordings()
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']

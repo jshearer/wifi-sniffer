@@ -1,6 +1,7 @@
 datatree==0.1.8.1
 Django==1.7.4
 djangorestframework==3.0.5
+djangorestframework-bulk==0.2
 docutils==0.12
 Flask==0.10.1
 Flask-Classy==0.6.10
