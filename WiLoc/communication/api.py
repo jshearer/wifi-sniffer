@@ -11,10 +11,11 @@ receiver_mapping = {}
 def get(resource, params=dict()):
 
 	params.update({"format":"json"})
+	headers = {'Content-type': 'application/json'}
 
 	url = urlparse.urljoin(server_address,resource)+'/'
 	
-	return requests.get(url,params=params).json()
+	return requests.get(url,params=params, headers=headers).json()['results']
 
 def post(resource, params=dict(), data=dict()):
 
