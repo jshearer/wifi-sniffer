@@ -12,10 +12,6 @@ recording_buffer = []
 req_every = 2
 last_req = time.time()
 
-global recording_buffer
-global req_every
-global last_req
-
 def get(resource, params=dict()):
 
 	params.update({"format":"json"})
@@ -68,11 +64,19 @@ def get_receiver_id(mac_addr):
 
 	return None
 
-def flush_recordings(buf):
-	post('recordings',data=buf)
+def flush_recordings():
+	global last_req
+	global recording_buffer
+	
+	post('recordings',data=recording_buffer)
+	recording_buffer = []
 	last_req = time.time()
 
 def new_recording(transmitter,receiver,rssi):
+	global recording_buffer
+	global req_every
+	global last_req
+
 	transmitter_id = get_transmitter_id(transmitter)
 	receiver_id = get_receiver_id(receiver)
 
@@ -83,7 +87,6 @@ def new_recording(transmitter,receiver,rssi):
 	
 	if time.time()-last_req > req_every:
 		flush_recordings(recording_buffer)
-		recording_buffer = []
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
