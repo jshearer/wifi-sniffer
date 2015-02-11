@@ -15,8 +15,9 @@ def get(resource, params=dict()):
 def post(resource, params=dict(), data=dict()):
 
 	params.update({"format":"json"})
+	headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
-	return requests.post(urlparse.urljoin(server_address,resource),params=params,data=data).json()
+	return requests.post(urlparse.urljoin(server_address,resource),params=params,data=data, headers=headers).json()
 
 def get_transmitter_id(mac_addr):
 	if mac_addr in transmitter_mapping:
