@@ -3,7 +3,7 @@ import netifaces
 import os
 import logging
 
-from WiLoc.config import sniffer_mac_beginning, DEBUG, real_network
+from WiLoc.config import sniffer_mac_beginning, DEBUG
 #/dev/null
 DN = open(os.devnull, 'w')
 
