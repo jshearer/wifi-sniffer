@@ -28,8 +28,6 @@ def post(resource, params=dict(), data=dict()):
 		url = url + '/'
 
 	response = requests.post(url,params=params, data=json.dumps(data), headers=headers)
-	logging.debug(response)
-	#import pdb;pdb.set_trace()
 
 	return response.json()
 
@@ -70,8 +68,6 @@ def new_recording(transmitter,receiver,rssi):
 		raise Exception("Receiver not in database. Please add: "+str(receiver))
 
 	resp = post('recordings',data={'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
-
-	logging.debug("Created new recording: "+str(resp))
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']

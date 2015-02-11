@@ -12,7 +12,7 @@ sh = logging.StreamHandler()
 sh.setFormatter(log_format)
 
 logging.getLogger().addHandler(sh)
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 if('sniffer_logpath' in os.environ):
 	add_log_path(os.environ['sniffer_logpath'])
