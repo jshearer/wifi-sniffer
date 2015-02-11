@@ -37,7 +37,7 @@ def get_transmitter_id(mac_addr):
 	if mac_addr in transmitter_mapping:
 		return transmitter_mapping[mac_addr]
 
-	server_query = get('transmitters', {'mac_addr':mac_addr})
+	server_query = get('transmitters', {'mac_addr':mac_addr})['results']
 
 	if len(server_query)==1:
 		#This transmitter is known?
@@ -53,7 +53,7 @@ def get_receiver_id(mac_addr):
 	if mac_addr in receiver_mapping:
 		return receiver_mapping[mac_addr]
 
-	server_query = get('receivers', {'mac_addr':mac_addr,'host':host_id})
+	server_query = get('receivers', {'mac_addr':mac_addr,'host':host_id})['results']
 
 	if len(server_query)==1:
 		#This transmitter is known?
