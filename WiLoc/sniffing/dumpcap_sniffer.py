@@ -2,6 +2,7 @@ from subprocess import Popen, PIPE
 from scapy.all import *
 
 from sniffing import PacketHandler
+import logging
 
 class STDInRawPcapReader(RawPcapReader):
 	def __init__(self,input_file):
@@ -59,7 +60,7 @@ def sniff_me(monitor, queue):
 	pkt = reader.read_packet()
 
 	while True:
-		if pkt != None:
+		while pkt != None:
 			PacketHandler(monitor,queue)(pkt)
-		pkt = reader.read_packet()
+			pkt = reader.read_packet()
 		time.sleep(0.001)
