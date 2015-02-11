@@ -66,15 +66,12 @@ def new_recording(transmitter,receiver,rssi):
 	transmitter_id = get_transmitter_id(transmitter)
 	receiver_id = get_receiver_id(receiver)
 
-	logging.info("Transmitter: (%s,%s), Receiver: (%s,%s)"%(transmitter,transmitter_id,receiver,receiver_id))
-
-
-
 	if receiver_id is None:
 		raise Exception("Receiver not in database. Please add: "+str(receiver))
 
-	post('recordings',data={'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
+	resp = post('recordings',data={'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
 
+	logging.debug("Created new recording: "+str(resp.text))
 
 def get_host_id(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
