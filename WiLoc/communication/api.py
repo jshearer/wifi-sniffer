@@ -83,6 +83,8 @@ def new_recording(transmitter,receiver,rssi):
 	transmitter_id = get_transmitter_id(transmitter)
 	receiver_id = get_receiver_id(receiver)
 
+	logging.info("transmitter: %s, receiver: %s, rssi: %f"%(transmitter,receiver,rssi))
+
 	if receiver_id is None:
 		raise Exception("Receiver not in database. Please add: "+str(receiver))
 
