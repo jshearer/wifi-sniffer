@@ -24,9 +24,10 @@ def setup_wifi():
 				logging.warning("WiFi loaded from backup. Connecting to: {%s}. This data may be incorrect!"%(wifi_settings['ESSID'],))
 		else:
 			logging.error("No backup file found. Cannot configure wifi!")
+			return
 
 
-	if host and wifi_settings['enabled']:
+	if wifi_settings['enabled']:
 		#We assume running arch
 
 		ssid = wifi_settings['ESSID']
