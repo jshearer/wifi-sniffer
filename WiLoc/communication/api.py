@@ -50,17 +50,20 @@ def get_transmitter_id(mac_addr):
 		return post('transmitters',data={'mac_addr':mac_addr,'name':'Unknown'})['url']
 
 def get_receiver_id(mac_addr):
-	from WiLoc import host_id
+	from WiLoc import device_id
 
 	if mac_addr in receiver_mapping:
 		return receiver_mapping[mac_addr]
 
-	server_query = get('receivers', {'mac_addr':mac_addr,'host':host_id})['results']
+	try:
+		server_query = get('receivers', {'mac_addr':mac_addr,'host':get_host_id(device_id)})['results']
 
-	if len(server_query)==1:
-		#This transmitter is known?
-		receiver_mapping[mac_addr] = server_query[0]['url']
-		return server_query[0]['url']
+		if len(server_query)==1:
+			#This transmitter is known?
+			receiver_mapping[mac_addr] = server_query[0]['url']
+			return server_query[0]['url']
+	except requests.exceptions.ConnectionError as e:
+		logging.error("Unable to connect to server to get receiver id.")
 
 	return None
 
