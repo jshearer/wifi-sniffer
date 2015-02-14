@@ -51,6 +51,9 @@ def start_sniffing(endpoint, mode=None, context=None):
 	for monitor in mons:
 		logging.info('Starting sniffing on [%s]'%monitor['mon'])
 
+		if api.get_receiver_id(monitor['mac']) is None:
+			raise Exception("Receiver not in database. Please add: "+str(monitor['mac']))
+
 		proc = Process(target=sniff_me,args=(monitor,data_queue))
 		proc.start()
 		proc_list.append(proc)
