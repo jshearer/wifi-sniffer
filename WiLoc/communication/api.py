@@ -56,7 +56,7 @@ def get_receiver_id(mac_addr):
 		return receiver_mapping[mac_addr]
 
 	try:
-		server_query = get('receivers', {'mac_addr':mac_addr,'host':get_host_id(device_id)})['results']
+		server_query = get('receivers', {'mac_addr':mac_addr})['results']
 
 		if len(server_query)==1:
 			#This transmitter is known?
