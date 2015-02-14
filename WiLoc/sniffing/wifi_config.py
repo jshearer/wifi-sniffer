@@ -3,7 +3,7 @@ import netifaces
 import os
 import logging
 
-from WiLoc.config import sniffer_mac_beginning, DEBUG
+from WiLoc.config import sniffer_mac_beginning
 #/dev/null
 DN = open(os.devnull, 'w')
 

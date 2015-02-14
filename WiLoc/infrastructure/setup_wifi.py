@@ -1,16 +1,30 @@
 import os
 import logging
+import requests
+import json
 
 from WiLoc.sniffing.wifi_config import get_real_card
 from WiLoc.communication.api import get
+from WiLoc.config import wifi_backup_filename
 from WiLoc import device_id
 
 def setup_wifi():
-	host = get('hosts',{'uid':device_id})['results'][0]
-	location = get(host['location'])
-	wifi_settings = get(location['wifi_settings'])
+	try:
+		host = get('hosts',{'uid':device_id})['results'][0]
+		location = get(host['location'])
+		wifi_settings = get(location['wifi_settings'])
+		with open(wifi_backup_filename,'w') as f:
+			f.write(json.dumps(wifi_settings))
+		logging.info("WiFi data pulled from server. Hostname: "+str(host['name'])+" at "+str(location['name'])+", wifi enabled: "+str(wifi_settings['enabled']))
+	except requests.exceptions.ConnectionError as e:
+		logging.warning("Unable to connect to api. Attempting to fall back to stored wifi data.")
+		if os.path.isfile(wifi_backup_filename):
+			with open(wifi_backup_filename,'r') as f:
+				wifi_settings = json.loads(f.read())
+				logging.warning("WiFi loaded from backup. Connecting to: {%s}. This data may be incorrect!"%(wifi_settings['ESSID'],))
+		else:
+			logging.error("No backup file found. Cannot configure wifi!")
 
-	logging.info("Wifi setup. Hostname: "+str(host['name'])+" at "+str(location['name'])+", wifi enabled: "+str(wifi_settings['enabled']))
 
 	if host and wifi_settings['enabled']:
 		#We assume running arch
