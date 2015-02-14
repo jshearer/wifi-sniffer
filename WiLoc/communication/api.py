@@ -9,7 +9,7 @@ from WiLoc.config import server_address
 transmitter_mapping = {}
 receiver_mapping = {}
 recording_buffer = []
-req_every = 2
+req_every = 10
 last_req = time.time()
 
 def get(resource, params=dict()):
