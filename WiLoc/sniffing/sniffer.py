@@ -49,10 +49,12 @@ def start_sniffing(endpoint, mode=None, context=None):
 		raise Exception('Sniffing method must start with either \'d\' or \'s\'')
 
 	for monitor in mons:
-		logging.info('Starting sniffing on [%s]'%monitor['mon'])
+		receiver_id = api.get_receiver_id(monitor['mac'])
 
-		if api.get_receiver_id(monitor['mac']) is None:
+		if receiver_id is None:
 			raise Exception("Receiver not in database. Please add: "+str(monitor['mac']))
+
+		logging.info('Starting sniffing on [%s], id: %s'%(monitor['mon'],receiver_id))
 
 		proc = Process(target=sniff_me,args=(monitor,data_queue))
 		proc.start()
