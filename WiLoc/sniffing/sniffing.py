@@ -9,22 +9,21 @@ import logging
 def PacketHandler(monitor,queue):
 
 	def handle(pkt):
-		if pkt.haslayer(UDP) and pkt.load=='Hello world!' and pkt.addr3.startswith('ff'):
-			try:
-				extra = pkt.notdecoded
-			except:
-				extra = None
-			if extra!=None:
-				signal_strength = -(256-ord(extra[-4:-3]))
-			else:
-				signal_strength = -255
-				logging.warning('No signal strength found')
+		try:
+			extra = pkt.notdecoded
+		except:
+			extra = None
+		if extra!=None:
+			signal_strength = -(256-ord(extra[-4:-3]))
+		else:
+			signal_strength = -255
+			logging.warning('No signal strength found')
 
-			#It might be addr1?
-			dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
-			queue.put(dat)
+		#It might be addr1?
+		dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
+		queue.put(dat)
 
-			logging.debug("1,2,3: (%s,%s,%s)"%(pkt.addr1,pkt.addr2,pkt.addr3))
+		logging.debug("1,2,3: (%s,%s,%s)"%(pkt.addr1,pkt.addr2,pkt.addr3))
 
 
 	return handle
