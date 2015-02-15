@@ -60,6 +60,6 @@ def sniff_me(monitor, queue):
 	pkt = reader.read_packet()
 
 	while True:
-		while pkt != None:
+		if pkt is not None:
 			PacketHandler(monitor,queue)(pkt)
-			pkt = reader.read_packet()
+		pkt = reader.read_packet()
