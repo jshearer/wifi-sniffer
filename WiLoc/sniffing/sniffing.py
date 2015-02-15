@@ -19,11 +19,12 @@ def PacketHandler(monitor,queue):
 			signal_strength = -255
 			logging.warning('No signal strength found')
 
-		#It might be addr1?
-		dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'data':pkt.load,'time':time.time()}
-		queue.put(dat)
-
-		logging.debug("1,2,3: (%s,%s,%s)"%(pkt.addr1,pkt.addr2,pkt.addr3))
+		try:
+			if pkt.addr2 and extra is not None:
+				dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'time':time.time()}
+				queue.put(dat)
+		except AttributeError as e:
+			logging.warning("Bad packet. AttributeError: "+str(e))
 
 
 	return handle

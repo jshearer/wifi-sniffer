@@ -47,7 +47,8 @@ def get_transmitter_id(mac_addr):
 		return server_query[0]['url']
 	else:
 		#New transmitter!
-		return post('transmitters',data={'mac_addr':mac_addr,'name':'Unknown'})['url']
+		pdata = post('transmitters',data={'mac_addr':mac_addr,'name':'Unknown'})
+		return pdata['url']
 
 def get_receiver_id(mac_addr):
 	from WiLoc import device_id
@@ -80,10 +81,11 @@ def new_recording(transmitter,receiver,rssi):
 	global req_every
 	global last_req
 
+	if transmitter is None or receiver is None:
+		import pdb;pdb.set_trace()
+
 	transmitter_id = get_transmitter_id(transmitter)
 	receiver_id = get_receiver_id(receiver)
-
-	logging.info("transmitter: %s, receiver: %s, rssi: %f"%(transmitter,receiver,rssi))
 
 	if receiver_id is None:
 		raise Exception("Receiver not in database. Please add: "+str(receiver))

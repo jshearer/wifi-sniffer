@@ -17,6 +17,9 @@ logging.getLogger().setLevel(logging.INFO)
 if('sniffer_logpath' in os.environ):
 	add_log_path(os.environ['sniffer_logpath'])
 
+#STfU REQUESTS
+logging.getLogger("requests").setLevel(logging.WARNING)
+
 def add_log_path(path):
 	logfile = ''
 
