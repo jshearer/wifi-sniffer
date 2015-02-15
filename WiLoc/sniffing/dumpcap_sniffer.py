@@ -53,7 +53,7 @@ class STDInPcapReader(STDInRawPcapReader):
 		return self.read_packet(size)
 
 def sniff_me(monitor, queue):
-	tshark_proc = Popen(['dumpcap', '-i'+monitor['mon'], '-f', 'portrange 5-10000', '-P','-B10', '-w', '-'], stdout=PIPE)
+	tshark_proc = Popen(['dumpcap', '-i'+monitor['mon'], '-f', 'tcp port 80', '-P','-B10', '-w', '-'], stdout=PIPE)
 	time.sleep(1)
 	reader = STDInPcapReader(tshark_proc.stdout)
 
