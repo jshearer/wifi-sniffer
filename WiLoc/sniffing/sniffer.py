@@ -96,6 +96,7 @@ def start_sniffing(endpoint, mode=None, context=None):
 				time.sleep(0.001)
 			else:
 				time.sleep(10.5)
+				data_queue.queue.clear()
 
 	signal.signal(signal.SIGINT,ctrl_c_handler)
 	if context:
