@@ -99,7 +99,7 @@ def start_sniffing(endpoint, mode=None, context=None):
 				time.sleep(10.5)
 				#Clear the queue because we don't want all that trash.
 				while not data_queue.empty():
-    				data_queue.get() 
+					data_queue.get() 
 
 	signal.signal(signal.SIGINT,ctrl_c_handler)
 	if context:
