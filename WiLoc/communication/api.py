@@ -50,7 +50,9 @@ def post(resource, params=dict(), data=dict(), run_json=True):
 	if not url.endswith('/'):
 		url = url + '/'
 
-	response = session.post(url,params=params, data=json.dumps(data), headers=headers)
+	prepared = requests.Request('POST', url, params=params, data=json.dumps(data), headers=headers)
+
+	response = session.send(session.prepare_request(prepared))
 
 	return (response.json() if run_json else response)
 
