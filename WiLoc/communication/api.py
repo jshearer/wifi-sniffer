@@ -5,7 +5,6 @@ import json
 import time
 
 from WiLoc.config import server_address
-from WiLoc import device_id
 
 transmitter_mapping = {}
 receiver_mapping = {}
@@ -39,7 +38,7 @@ def post(resource, params=dict(), data=dict()):
 
 	return response.json()
 
-def is_enabled():
+def is_enabled(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
 
 	if len(server_query)==1:
@@ -108,8 +107,8 @@ def new_recording(transmitter,receiver,rssi):
 		logging.info("Flushing %i recordings! elapsedtime: %f"%(len(recording_buffer),time.time()-last_req,))
 		flush_recordings()
 
-def get_host_id(dev_id):
-	server_query = get('hosts',{'device_uid':dev_id})['results']
+def get_host_id(device_id):
+	server_query = get('hosts',{'device_uid':device_id})['results']
 
 	if len(server_query)==1:
 		return server_query[0]['url']
