@@ -40,7 +40,7 @@ def get(resource, params=dict()):
 	if not url.endswith('/'):
 		url = url + '/'
 	
-	return session.get(url,params=params.json()
+	return session.get(url,params=params).json()
 
 def post(resource, params=dict(), data=dict(), run_json=True):
 	url = urlparse.urljoin(server_address,resource)
