@@ -66,8 +66,8 @@ def get_transmitter_id(mac_addr):
 		pdata = post('transmitters',data={'mac_addr':mac_addr,'name':'Unknown'})
 		if 'url' in pdata:
 			return pdata['url']
-		logging.error('Somethign bad happened. Heres the request: '+str(pdata.headers)+", "+str(pdata.data))
-		raise Exception('Somethign bad happened. Heres the request: '+str(pdata.headers)+", "+str(pdata.data))
+		logging.error('Somethign bad happened. Heres the request: '+str(pdata))
+		raise Exception('Somethign bad happened. Heres the request: '+str(pdata))
 
 def get_receiver_id(mac_addr):
 	from WiLoc import device_id
