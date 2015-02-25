@@ -28,8 +28,11 @@ auth_url = fix_url(urlparse.urljoin(server_address,'api-auth/login?next=/'))
 #get csrf token
 csrf = session.get(auth_url).cookies['csrftoken']
 
+session.headers['X-CSRFToken'] = csrf
+logging.info("Set CSRFToken. All headers are as follows: "+str(session.headers))
+
 #Authenticate
-session.post(auth_url, data=auth_info, headers={'X-CSRFToken':csrf})
+session.post(auth_url, data=auth_info)
 
 session.headers['Content-type'] = 'application/json'
 
