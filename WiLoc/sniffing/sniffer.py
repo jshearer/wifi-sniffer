@@ -93,9 +93,9 @@ def start_sniffing(endpoint, mode=None, context=None):
 				start_time = time.time()
 				new_enabled = api.is_enabled(device_id)
 
-				if(new enabled != enabled):
+				if(new enabled is not enabled):
 					logging.info(('Enabling' if new_enabled else 'Disabling') + ' sniffer.')
-				
+
 				enabled = new_enabled
 			if enabled:
 				handle_single_queue_elem(data_queue)
