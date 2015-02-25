@@ -9,7 +9,8 @@ from WiLoc.config import server_address
 transmitter_mapping = {}
 receiver_mapping = {}
 recording_buffer = []
-req_every = 10
+req_every = 1
+req_size = 400
 last_req = time.time()
 
 def get(resource, params=dict()):
@@ -92,7 +93,7 @@ def new_recording(transmitter,receiver,rssi):
 
 	recording_buffer.append({'transmitter':transmitter_id,'receiver':receiver_id,'rssi':rssi})
 	
-	if time.time()-last_req > req_every:
+	if (time.time()-last_req > req_every) or len(recording_buffer>req_size):
 		logging.info("Flushing %i recordings! elapsedtime: %f"%(len(recording_buffer),time.time()-last_req,))
 		flush_recordings()
 
