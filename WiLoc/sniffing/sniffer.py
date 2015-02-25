@@ -84,7 +84,7 @@ def start_sniffing(endpoint, mode=None, context=None):
 
 	def loop_forever():
 		from WiLoc import device_id
-		
+
 		enabled = api.is_enabled(device_id)
 		start_time = time.time()
 		while True:
@@ -97,7 +97,9 @@ def start_sniffing(endpoint, mode=None, context=None):
 				time.sleep(0.001)
 			else:
 				time.sleep(10.5)
-				data_queue.queue.clear()
+				#Clear the queue because we don't want all that trash.
+				while not data_queue.empty():
+    				data_queue.get() 
 
 	signal.signal(signal.SIGINT,ctrl_c_handler)
 	if context:
