@@ -38,6 +38,14 @@ def post(resource, params=dict(), data=dict()):
 
 	return response.json()
 
+def is_enabled():
+	server_query = get('hosts',{'device_uid':device_id})['results'].
+
+	if len(server_query)==1:
+		return server_query[0]['enabled']
+
+	return False
+
 def get_transmitter_id(mac_addr):
 	if mac_addr in transmitter_mapping:
 		return transmitter_mapping[mac_addr]

@@ -82,10 +82,20 @@ def start_sniffing(endpoint, mode=None, context=None):
 			logging.warning('Ok ok, quitting')
 			sys.exit(0)
 
+	start_time = time.time()
+
 	def loop_forever():
+		enabled = False
 		while True:
-			handle_single_queue_elem(data_queue)
-			time.sleep(0.001)
+			#Check every 10 seconds if enabled or not
+			if((time.time()-start_time)>10:
+				start_time = time.time()
+				enabled = api.is_enabled()
+			if enabled:
+				handle_single_queue_elem(data_queue)
+				time.sleep(0.001)
+			else:
+				time.sleep(10.5)
 
 	signal.signal(signal.SIGINT,ctrl_c_handler)
 	if context:
