@@ -88,7 +88,7 @@ def start_sniffing(endpoint, mode=None, context=None):
 		enabled = False
 		while True:
 			#Check every 10 seconds if enabled or not
-			if((time.time()-start_time)>10:
+			if (time.time()-start_time)>10:
 				start_time = time.time()
 				enabled = api.is_enabled()
 			if enabled:
