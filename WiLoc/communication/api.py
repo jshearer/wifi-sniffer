@@ -31,28 +31,23 @@ csrf = session.get(auth_url).cookies['csrftoken']
 #Authenticate
 session.post(auth_url, data=auth_info, headers={'X-CSRFToken':csrf})
 
-def get(resource, params=dict()):
+session.headers['Content-type'] = 'application/json'
 
+def get(resource, params=dict()):
 	params.update({'format':'json'})
-	headers = {'Content-type': 'application/json'}
 
 	url = urlparse.urljoin(server_address,resource)
 	if not url.endswith('/'):
 		url = url + '/'
 	
-	return session.get(url,params=params, headers=headers).json()
+	return session.get(url,params=params.json()
 
 def post(resource, params=dict(), data=dict(), run_json=True):
-
-	headers = {'Content-type': 'application/json'}
-
 	url = urlparse.urljoin(server_address,resource)
 	if not url.endswith('/'):
 		url = url + '/'
 
-	prepared = requests.Request('POST', url, params=params, data=json.dumps(data), headers=headers)
-
-	response = session.send(session.prepare_request(prepared))
+	response = session.post(url,params=params, data=json.dumps(data))
 
 	return (response.json() if run_json else response)
 
