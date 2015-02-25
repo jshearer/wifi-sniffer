@@ -13,46 +13,60 @@ req_every = 1
 req_size = 400
 last_req = time.time()
 
-session = requests.Session()
+logged_in = False
 
-auth_info = {
-	'username': 'wiloc_admin',
-	'password': 'wiloc_admin'
-}
+session = requests.Session()
+session.headers['Content-type'] = 'application/json'
 
 def fix_url(url):
 	return (url if url.endswith('/') else url + '/')
 
-auth_url = fix_url(urlparse.urljoin(server_address,'api-auth/login?next=/'))
+def log_in():
+	auth_info = {
+		'username': 'wiloc_admin',
+		'password': 'wiloc_admin'
+	}
 
-#get csrf token
-csrf = session.get(auth_url).cookies['csrftoken']
+	auth_url = fix_url(urlparse.urljoin(server_address,'api-auth/login?next=/'))
+	#get csrf token
+	csrf = session.get(auth_url).cookies['csrftoken']
 
-session.headers['X-CSRFToken'] = csrf
-logging.info("Set CSRFToken. All headers are as follows: "+str(session.headers))
+	session.headers['X-CSRFToken'] = csrf
+	logging.info("Set CSRFToken. All headers are as follows: "+str(session.headers))
 
-#Authenticate
-session.post(auth_url, data=auth_info)
+	#Authenticate
+	session.post(auth_url, data=auth_info)
 
-session.headers['X-CSRFToken'] = None
+	session.headers['X-CSRFToken'] = None
 
-session.headers['Content-type'] = 'application/json'
+	logged_in = True
 
 def get(resource, params=dict()):
+	if(!logged_in):
+		log_in()
+
 	params.update({'format':'json'})
 
 	url = urlparse.urljoin(server_address,resource)
 	if not url.endswith('/'):
 		url = url + '/'
-	
+
 	return session.get(url,params=params).json()
 
 def post(resource, params=dict(), data=dict(), run_json=True):
+	if(!logged_in):
+		log_in()
+		
 	url = urlparse.urljoin(server_address,resource)
 	if not url.endswith('/'):
 		url = url + '/'
 
+	csrf = session.get(url).cookies['csrftoken']
+	session.headers['X-CSRFToken'] = csrf
+
 	response = session.post(url,params=params, data=json.dumps(data))
+
+	session.headers['X-CSRFToken'] = None
 
 	return (response.json() if run_json else response)
 
