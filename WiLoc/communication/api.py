@@ -46,6 +46,14 @@ def is_enabled(device_id):
 
 	return False
 
+def get_receiver_channel(receiver):
+	server_query = get('receivers', {'mac_addr': receiver})['results']
+
+	if len(server_query)==1:
+		return server_query[0]['channel']
+
+	return 6
+
 def get_transmitter_id(mac_addr):
 	if mac_addr in transmitter_mapping:
 		return transmitter_mapping[mac_addr]

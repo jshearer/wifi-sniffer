@@ -7,7 +7,7 @@ import signal
 import os
 import logging
 
-from wifi_config import setup_monitors,stop_monitor_all
+from wifi_config import setup_monitors,stop_monitor_all,set_device_channel
 from csv_output import make_csv
 from WiLoc.communication import api
 
@@ -54,7 +54,13 @@ def start_sniffing(endpoint, mode=None, context=None):
 		if receiver_id is None:
 			raise Exception("Receiver not in database. Please add: "+str(monitor['mac']))
 
-		logging.info('Starting sniffing on [%s], id: %s'%(monitor['mon'],receiver_id))
+		channel = api.get_receiver_channel(monitor['mac'])
+
+		logging.info('Setting %s to channel %i'$(monitor['mac'],channel))
+
+		set_device_channel(monitor['mon'],channel)
+
+		logging.info('Starting sniffing on [%s,%s], id: %s'%(monitor['mon'],monitor['mac'],receiver_id))
 
 		proc = Process(target=sniff_me,args=(monitor,data_queue))
 		proc.start()

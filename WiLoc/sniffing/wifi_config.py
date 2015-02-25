@@ -74,14 +74,14 @@ def stop_monitor_mode(mon):
 def set_device_channel(device,channel):
 	get_lines('iwconfig '+device+' channel '+str(channel))
 
-def start_monitor_mode(device):
+def start_monitor_mode(device, channel=6):
 	get_lines('ifconfig '+device+' down')
 	for line in get_lines('airmon-ng start '+device):
 		if '(monitor mode enabled on' in line:
 			mon = line.split('(monitor mode enabled on ')[1][:-1]
 			if mon.startswith('mon'):
 				mons[mon] = device
-				set_device_channel(mon,6)
+				set_device_channel(mon,channel)
 				return mon
 			else:
 				raise Exception('Error parsing line: '+line)
