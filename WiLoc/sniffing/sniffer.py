@@ -56,7 +56,7 @@ def start_sniffing(endpoint, mode=None, context=None):
 
 		channel = api.get_receiver_channel(monitor['mac'])
 
-		logging.info('Setting %s to channel %i'$(monitor['mac'],channel))
+		logging.info('Setting %s to channel %i'%(monitor['mac'],channel))
 
 		set_device_channel(monitor['mon'],channel)
 
