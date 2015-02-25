@@ -10,7 +10,6 @@ import logging
 from wifi_config import setup_monitors,stop_monitor_all
 from csv_output import make_csv
 from WiLoc.communication import api
-from WiLoc import device_id
 
 def handle_single_queue_elem(queue):
 	try:
@@ -84,6 +83,8 @@ def start_sniffing(endpoint, mode=None, context=None):
 			sys.exit(0)
 
 	def loop_forever():
+		from WiLoc import device_id
+		
 		enabled = api.is_enabled(device_id)
 		start_time = time.time()
 		while True:
