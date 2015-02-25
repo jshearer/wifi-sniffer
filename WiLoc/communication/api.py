@@ -39,7 +39,7 @@ def post(resource, params=dict(), data=dict()):
 	return response.json()
 
 def is_enabled():
-	server_query = get('hosts',{'device_uid':device_id})['results'].
+	server_query = get('hosts',{'device_uid':device_id})['results']
 
 	if len(server_query)==1:
 		return server_query[0]['enabled']
