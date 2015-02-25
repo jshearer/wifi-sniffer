@@ -51,12 +51,19 @@ def get(resource, params=dict()):
 	if not url.endswith('/'):
 		url = url + '/'
 
-	return session.get(url,params=params).json()
+	csrf = session.get(url).cookies['csrftoken']
+	session.headers['X-CSRFToken'] = csrf
+
+	response = session.get(url,params=params)
+
+	session.headers['X-CSRFToken'] = None
+
+	return response.json()
 
 def post(resource, params=dict(), data=dict(), run_json=True):
 	if(not logged_in):
 		log_in()
-		
+
 	url = urlparse.urljoin(server_address,resource)
 	if not url.endswith('/'):
 		url = url + '/'
