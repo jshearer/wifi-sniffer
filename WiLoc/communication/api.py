@@ -24,7 +24,11 @@ def get(resource, params=dict()):
 	if not url.endswith('/'):
 		url = url + '/'
 	
-	return requests.get(url,params=params, headers=headers, auth=auth_data).json()
+	response = requests.get(url,params=params, headers=headers, auth=auth_data)
+	if int(str(response.status_code)[0])<4:
+		return response.json()
+	else:
+		logging.warning("Server response code: %i. Response content: %s"%(response.status_code,response.content))
 
 def post(resource, params=dict(), data=dict()):
 
@@ -36,7 +40,10 @@ def post(resource, params=dict(), data=dict()):
 
 	response = requests.post(url,params=params, data=json.dumps(data), headers=headers, auth=auth_data)
 
-	return response.json()
+	if int(str(response.status_code)[0])<4:
+		return response.json()
+	else:
+		logging.warning("Server response code: %i. Response content: %s"%(response.status_code,response.content))
 
 def is_enabled(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
