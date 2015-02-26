@@ -29,6 +29,7 @@ def get(resource, params=dict()):
 		return response.json()
 	else:
 		logging.warning("Server response code: %i. Response content: %s"%(response.status_code,response.content))
+		return {}
 
 def post(resource, params=dict(), data=dict()):
 
@@ -44,6 +45,7 @@ def post(resource, params=dict(), data=dict()):
 		return response.json()
 	else:
 		logging.warning("Server response code: %i. Response content: %s"%(response.status_code,response.content))
+		return {}
 
 def is_enabled(device_id):
 	server_query = get('hosts',{'device_uid':device_id})['results']
