@@ -53,7 +53,7 @@ def setup_wifi():
 			if wifi_settings['hidden']:
 				wifi_file.write("Hidden=yes\n")
 
-		os.system("netctl reenable "+str(os.path.join('/etc/netctl',filename)))
+		os.system("netctl reenable "+str(filename))
 		os.system("netctl start "+str(filename))
 
 
