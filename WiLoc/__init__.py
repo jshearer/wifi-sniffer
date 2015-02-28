@@ -17,7 +17,7 @@ sh.setFormatter(log_format)
 logging.getLogger().addHandler(sh)
 logging.getLogger().setLevel(logging.INFO)
 
-logging.log('WiLoc initializing. GrayLog: (%s,%s)'%(graylog_address,graylog_port))
+logging.info('WiLoc initializing. GrayLog: (%s,%s)'%(graylog_address,graylog_port))
 
 graypy_handler = graypy.GELFHandler(graylog_address, graylog_port)
 logging.getLogger().addHandler(graypy_handler)
