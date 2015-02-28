@@ -23,8 +23,6 @@ logging.info('WiLoc initializing. GrayLog: (%s,%s)'%(graylog_address,graylog_por
 graypy_handler = graypy.GELFHandler(graylog_address, graylog_port)
 logging.getLogger().addHandler(graypy_handler)
 
-logging.getLogger().addFilter(StaticFilter())
-
 if('sniffer_logpath' in os.environ):
 	add_log_path(os.environ['sniffer_logpath'])
 
