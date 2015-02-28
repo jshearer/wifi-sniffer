@@ -20,12 +20,12 @@ logging.getLogger().setLevel(logging.INFO)
 graypy_handler = graypy.GELFHandler(graylog_address, graylog_port)
 logging.getLogger().addHandler(graypy_handler)
 
-class StaticFilter(logging.Filter):
-	def filter(self,record):
-		record.source = "PyLog"
-		return record
+# class StaticFilter(logging.Filter):
+# 	def filter(self,record):
+# 		record.source = "PyLog"
+# 		return record
 
-logging.getLogger().addFilter(StaticFilter())
+# logging.getLogger().addFilter(StaticFilter())
 
 logging.debug('WiLoc initialized.')
 
