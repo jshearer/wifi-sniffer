@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, DEVNULL
 from scapy.all import *
 
 from sniffing import PacketHandler
@@ -53,7 +53,7 @@ class STDInPcapReader(STDInRawPcapReader):
 		return self.read_packet(size)
 
 def sniff_me(monitor, queue):
-	tshark_proc = Popen(['dumpcap', '-i'+monitor['mon'], '-B10', '-P', '-s48', '-w', '-'], stdout=PIPE)
+	tshark_proc = Popen(['dumpcap', '-i'+monitor['mon'], '-B10', '-P', '-s48', '-w', '-'], stdout=PIPE, stderr=DEVNULL)
 	time.sleep(1)
 	reader = STDInPcapReader(tshark_proc.stdout)
 
