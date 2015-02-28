@@ -3,6 +3,9 @@ from logging import handlers
 import os
 import sys
 import traceback
+import graypy
+
+from config import graylog_address, graylog_port
 
 import communication.api as api
 
@@ -13,6 +16,18 @@ sh.setFormatter(log_format)
 
 logging.getLogger().addHandler(sh)
 logging.getLogger().setLevel(logging.INFO)
+
+graypy_handler = graypy.GELFHandler(graylog_address, graylog_port)
+logging.getLogger().addHandler(handler)
+
+class StaticFilter(logging.Filter):
+	def filter(self,record):
+		record['source'] = "PyLog"
+		return record
+
+logging.getLogger().addFilter(StaticFilter)
+
+logging.debug('WiLoc initialized.')
 
 if('sniffer_logpath' in os.environ):
 	add_log_path(os.environ['sniffer_logpath'])
