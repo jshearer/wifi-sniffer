@@ -22,7 +22,7 @@ logging.getLogger().addHandler(graypy_handler)
 
 class StaticFilter(logging.Filter):
 	def filter(self,record):
-		record['source'] = "PyLog"
+		record.source = "PyLog"
 		return record
 
 logging.getLogger().addFilter(StaticFilter())
