@@ -25,7 +25,7 @@ class StaticFilter(logging.Filter):
 		record['source'] = "PyLog"
 		return record
 
-logging.getLogger().addFilter(StaticFilter)
+logging.getLogger().addFilter(StaticFilter())
 
 logging.debug('WiLoc initialized.')
 
