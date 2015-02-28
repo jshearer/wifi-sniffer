@@ -4,6 +4,7 @@ import os
 import sys
 import traceback
 import graypy
+import socket
 
 from config import graylog_address, graylog_port
 
@@ -25,6 +26,7 @@ logging.getLogger().addHandler(graypy_handler)
 class StaticFilter(logging.Filter):
 	def filter(self,record):
 		record.PYTHON_LOGGING = True
+		record.source = socket.gethostname()
 		return record
 
 logging.getLogger().addFilter(StaticFilter())
