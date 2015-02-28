@@ -1,4 +1,11 @@
-from subprocess import Popen, PIPE, DEVNULL
+from subprocess import Popen, PIPE
+
+try:
+	from subprocess import DEVNULL # py3k
+except ImportError:
+	import os
+	DEVNULL = open(os.devnull, 'wb')
+
 from scapy.all import *
 
 from sniffing import PacketHandler
