@@ -18,7 +18,7 @@ logging.getLogger().addHandler(sh)
 logging.getLogger().setLevel(logging.INFO)
 
 graypy_handler = graypy.GELFHandler(graylog_address, graylog_port)
-logging.getLogger().addHandler(handler)
+logging.getLogger().addHandler(graypy_handler)
 
 class StaticFilter(logging.Filter):
 	def filter(self,record):
