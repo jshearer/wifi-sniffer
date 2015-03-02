@@ -41,6 +41,9 @@ def setup_wifi():
 
 		filename = "sniff-%s-securedby-%s"%(ssid,security)
 
+		os.system("netctl disable "+str(filename))
+		os.system("netctl stop "+str(filename))
+
 		with open(os.path.join('/etc/netctl',filename),'w') as wifi_file:
 			wifi_file.write("Description='Set up wifi for sniffing.'\n")
 			wifi_file.write("Interface=%s\n"%(interface,))
