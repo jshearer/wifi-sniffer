@@ -2,6 +2,7 @@ import os
 import logging
 import requests
 import json
+import filecmp
 
 from WiLoc.sniffing.wifi_config import get_real_card
 from WiLoc.communication.api import get
@@ -41,10 +42,9 @@ def setup_wifi():
 
 		filename = "sniff-%s-securedby-%s"%(ssid,security)
 
-		os.system("netctl disable "+str(filename))
-		os.system("netctl stop "+str(filename))
+		
 
-		with open(os.path.join('/etc/netctl',filename),'w') as wifi_file:
+		with open(os.path.join('/etc/netctl',filename+'_CMP'),'w') as wifi_file:
 			wifi_file.write("Description='Set up wifi for sniffing.'\n")
 			wifi_file.write("Interface=%s\n"%(interface,))
 			wifi_file.write("Connection=wireless\n")
@@ -56,8 +56,14 @@ def setup_wifi():
 			if wifi_settings['hidden']:
 				wifi_file.write("Hidden=yes\n")
 
-		os.system("netctl reenable "+str(filename))
-		os.system("netctl start "+str(filename))
+		if not filecmp.cmp(os.path.join('/etc/netctl',filename),os.path.join('/etc/netctl',filename+'_CMP')):
+			os.system("netctl disable "+str(filename))
+			os.system("netctl stop "+str(filename))
+
+			os.rename(os.path.join('/etc/netctl',filename+'_CMP'),os.path.join('/etc/netctl',filename))
+
+			os.system("netctl reenable "+str(filename))
+			os.system("netctl start "+str(filename))
 
 
 if __name__=="__main__":
