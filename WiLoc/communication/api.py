@@ -9,8 +9,8 @@ from WiLoc.config import server_address
 transmitter_mapping = {}
 receiver_mapping = {}
 recording_buffer = []
-req_every = 1
-req_size = 400
+req_every = 0.5
+req_size = 200
 last_req = time.time()
 
 auth_data = ('wiloc_admin', 'wiloc_admin')
