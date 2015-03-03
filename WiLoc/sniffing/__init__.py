@@ -1,5 +1,6 @@
 import sys
 import traceback
+import logging
 
 sys.path.append('../')
 
