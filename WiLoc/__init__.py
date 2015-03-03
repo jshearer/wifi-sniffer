@@ -1,7 +1,6 @@
 import logging
 from logging import handlers
 import os
-import sys
 import traceback
 import graypy
 import socket
@@ -51,7 +50,7 @@ if id_file:
 	with open(id_file,'r') as f:
 		device_id = f.read().replace("\n","")
 
-
+import sys
 def log_uncaught_exceptions(ex_cls, ex, tb):
 
 	logging.critical(''.join(traceback.format_tb(tb)))
