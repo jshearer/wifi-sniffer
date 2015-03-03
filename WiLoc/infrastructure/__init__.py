@@ -1,4 +1,6 @@
 import sys
+import traceback
+
 def log_uncaught_exceptions(ex_cls, ex, tb):
 
 	logging.critical(''.join(traceback.format_tb(tb)))

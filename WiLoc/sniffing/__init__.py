@@ -1,7 +1,8 @@
 import sys
+import traceback
+
 sys.path.append('../')
 
-import sys
 def log_uncaught_exceptions(ex_cls, ex, tb):
 
 	logging.critical(''.join(traceback.format_tb(tb)))
