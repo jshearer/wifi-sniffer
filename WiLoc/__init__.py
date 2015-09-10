@@ -2,7 +2,6 @@ import logging
 from logging import handlers
 import os
 import traceback
-import graypy
 import socket
 
 # from config import graylog_address, graylog_port
