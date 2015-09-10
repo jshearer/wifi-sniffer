@@ -6,6 +6,7 @@ import logging
 
 from sniffer import start_sniffing
 from WiLoc import add_log_path
+from WiLoc.infrastructure.setup_wifi import setup_wifi
 
 if __name__=='__main__':
 	if os.geteuid()==0:
@@ -17,6 +18,7 @@ if __name__=='__main__':
 		parser.add_argument('--stdout')
 		parser.add_argument('--stderr')
 		parser.add_argument('--logfile')
+		parser.add_argument('--setup_wifi', default=False, action='store_true', dest="setup_wifi")
 		parsed_args = parser.parse_args()
 
 		"""
@@ -40,6 +42,9 @@ if __name__=='__main__':
 		context.signal_map = {
 		
 		}
+
+		if parsed_args.setup_wifi:
+			setup_wifi()
 
 		start_sniffing(mode=parsed_args.mode, endpoint=parsed_args.endpoint, context=(context if parsed_args.daemon else None))
 	else:

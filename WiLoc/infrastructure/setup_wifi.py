@@ -64,7 +64,3 @@ def setup_wifi():
 
 			os.system("netctl reenable "+str(filename))
 			os.system("netctl start "+str(filename))
-
-
-if __name__=="__main__":
-	setup_wifi()
