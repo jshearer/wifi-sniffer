@@ -22,7 +22,7 @@ def get_wlan_ifaces():
 	return filter(lambda iface:iface.startswith('wlan'),netifaces.interfaces())
 
 def get_mon_ifaces():
-	return filter(lambda iface:iface.startswith('mon'),netifaces.interfaces())
+	return filter(lambda iface:iface.endswith('mon'),netifaces.interfaces())
 
 def iface_to_mac():
 	mapping = {}
