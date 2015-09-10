@@ -11,8 +11,8 @@ if __name__=='__main__':
 	if os.geteuid()==0:
 		parser = argparse.ArgumentParser(description='Launch the sniffer! Mmmmmm')
 		parser.add_argument('--mode', choices=['dumpcap','scapy'], default='dumpcap')
-		parser.add_argument('--endpoint', required=True)
-		parser.add_argument('--pidfile', required=True)
+		parser.add_argument('--endpoint', required=False)
+		parser.add_argument('--pidfile', required=False)
 		parser.add_argument('--daemon', action='store_true', default=False, dest="daemon")
 		parser.add_argument('--stdout')
 		parser.add_argument('--stderr')
