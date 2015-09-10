@@ -80,13 +80,11 @@ def set_device_channel(device,channel):
 def start_monitor_mode(device, channel=6):
 	get_lines('ifconfig '+device+' down')
 	for line in get_lines('airmon-ng start '+device):
-		if monitor_on.match(line)
+		if monitor_on.match(line):
 			mon = device+"mon"
-				mons[mon] = device
-				set_device_channel(mon,channel)
-				return mon
-			else:
-				raise Exception('Error parsing line: '+line)
+			mons[mon] = device
+			set_device_channel(mon,channel)
+			return mon
 	raise Exception('Error starting monitor mode on: '+device)
 
 def setup_monitors():
