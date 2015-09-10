@@ -41,6 +41,7 @@ def add_log_path(path):
 	logging.getLogger().addHandler(fh)
 
 device_id = ''
+id_file = None
 if(os.path.isfile('/etc/machine-id')):
 	id_file = '/etc/machine-id'
 elif(os.path.isfile('/var/lib/dbus/machine-id')):
