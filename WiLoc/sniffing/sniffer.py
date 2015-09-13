@@ -32,6 +32,8 @@ def start_sniffing(endpoint, mode=None, context=None):
 
 	mons = setup_monitors()
 
+	channel_counter = 0
+
 	if len(mons)<1:
 		logging.info('No monitor cards found. Exiting.')
 		sys.exit(0)
@@ -54,11 +56,11 @@ def start_sniffing(endpoint, mode=None, context=None):
 		if receiver_id is None:
 			raise Exception("Receiver not in database. Please add: "+str(monitor['mac']))
 
-		# channel = api.get_receiver_channel(monitor['mac'])
+		channel = api.get_receiver_channel(monitor['mac'])
 
-		# logging.info('Setting %s to channel %i'%(monitor['mac'],channel))
+		logging.info('Setting %s to channel %i'%(monitor['mac'],channel))
 
-		# set_device_channel(monitor['mon'],channel)
+		set_device_channel(monitor['mon'],channel)
 
 		logging.info('Starting sniffing on [%s,%s], id: %s'%(monitor['mon'],monitor['mac'],receiver_id))
 
@@ -88,6 +90,13 @@ def start_sniffing(endpoint, mode=None, context=None):
 			logging.warning('Ok ok, quitting')
 			sys.exit(0)
 
+	def hop():
+		channel_counter = (channel_counter + 1)%16
+		for monitor in mons:
+			logging.info('Setting %s to channel %i'%(monitor['mac'],channel_counter+1))
+
+			set_device_channel(monitor['mon'],channel_counter+1)
+
 	def loop_forever():
 		from WiLoc import device_id
 
@@ -98,6 +107,8 @@ def start_sniffing(endpoint, mode=None, context=None):
 			if (time.time()-start_time)>10:
 				start_time = time.time()
 				new_enabled = api.is_enabled(device_id)
+
+				hop()
 
 				if new_enabled is not enabled:
 					logging.info(('Enabling' if new_enabled else 'Disabling') + ' sniffer.')

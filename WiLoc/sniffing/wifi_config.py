@@ -79,12 +79,11 @@ def set_device_channel(device,channel):
 
 def start_monitor_mode(device, channel=6):
 	get_lines('ifconfig '+device+' down')
-	get_lines('airmon-ng stop '+device) #gets channel hopping going
 	for line in get_lines('airmon-ng start '+device):
 		if monitor_on.match(line):
 			mon = device+"mon"
 			mons[mon] = device
-			# set_device_channel(mon,channel)
+			set_device_channel(mon,channel)
 			return mon
 	raise Exception('Error starting monitor mode on: '+device)
 
