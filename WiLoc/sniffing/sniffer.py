@@ -54,11 +54,11 @@ def start_sniffing(endpoint, mode=None, context=None):
 		if receiver_id is None:
 			raise Exception("Receiver not in database. Please add: "+str(monitor['mac']))
 
-		channel = api.get_receiver_channel(monitor['mac'])
+		# channel = api.get_receiver_channel(monitor['mac'])
 
-		logging.info('Setting %s to channel %i'%(monitor['mac'],channel))
+		# logging.info('Setting %s to channel %i'%(monitor['mac'],channel))
 
-		set_device_channel(monitor['mon'],channel)
+		# set_device_channel(monitor['mon'],channel)
 
 		logging.info('Starting sniffing on [%s,%s], id: %s'%(monitor['mon'],monitor['mac'],receiver_id))
 
