@@ -6,6 +6,7 @@ import sys
 import signal
 import os
 import logging
+import random
 
 from wifi_config import setup_monitors,stop_monitor_all,set_device_channel
 from csv_output import make_csv
@@ -91,11 +92,11 @@ def start_sniffing(endpoint, mode=None, context=None):
 			sys.exit(0)
 
 	def hop():
-		channel_counter = (channel_counter + 1)%16
 		for monitor in mons:
-			logging.info('Setting %s to channel %i'%(monitor['mac'],channel_counter+1))
+			chan = random.randint(1,15)
+			logging.info('Setting %s to channel %i'%(monitor['mac'],chan))
 
-			set_device_channel(monitor['mon'],channel_counter+1)
+			set_device_channel(monitor['mon'],chan)
 
 	def loop_forever():
 		from WiLoc import device_id
