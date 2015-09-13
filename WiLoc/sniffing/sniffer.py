@@ -92,8 +92,8 @@ def start_sniffing(endpoint, mode=None, context=None):
 			sys.exit(0)
 
 	def hop():
+		chan = random.randint(1,15)
 		for monitor in mons:
-			chan = random.randint(1,15)
 			logging.info('Setting %s to channel %i'%(monitor['mac'],chan))
 
 			set_device_channel(monitor['mon'],chan)
