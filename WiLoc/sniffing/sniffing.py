@@ -9,6 +9,7 @@ import logging
 def PacketHandler(monitor,queue):
 
 	def handle(pkt):
+		import pdb;pdb.set_trace()
 		try:
 			extra = pkt.notdecoded
 		except:
