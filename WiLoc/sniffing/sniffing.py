@@ -9,10 +9,6 @@ import logging
 def PacketHandler(monitor,queue):
 
 	def handle(pkt):
-		import pprint;
-		pprint.pprint(pkt)
-		import sys
-		sys.exit(0)
 		try:
 			extra = pkt.notdecoded
 		except:
