@@ -11,16 +11,13 @@ def PacketHandler(monitor,queue):
 	def handle(pkt):
 		try:
 			extra = pkt.notdecoded
-		except:
-			extra = None
-		if extra!=None:
 			signal_strength = -(256-ord(extra[-4:-3]))
-		else:
+		except:
 			signal_strength = -255
 			logging.warning('No signal strength found')
-
+		
 		try:
-			if pkt.addr2 and extra is not None:
+			if pkt.addr2 and pkt.addr2.lower()=="c0:ee:fb:25:4d:c1":
 				dat = {'monitor':monitor['mac'],'transmitter':pkt.addr2,'strength':signal_strength,'time':time.time()}
 				queue.put(dat)
 		except AttributeError as e:
