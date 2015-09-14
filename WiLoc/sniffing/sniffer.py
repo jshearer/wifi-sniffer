@@ -48,6 +48,8 @@ def start_sniffing(endpoint, mode=None, context=None):
 		from dumpcap_sniffer import sniff_me
 	elif method.startswith('s'):
 		from scapy_sniffer import sniff_me
+	elif method.startswith('a'):
+		from airodump_sniffer import sniff_me
 	else:
 		raise Exception('Sniffing method must start with either \'d\' or \'s\'')
 

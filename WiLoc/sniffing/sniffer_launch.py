@@ -11,7 +11,7 @@ from WiLoc.infrastructure.setup_wifi import setup_wifi
 if __name__=='__main__':
 	if os.geteuid()==0:
 		parser = argparse.ArgumentParser(description='Launch the sniffer! Mmmmmm')
-		parser.add_argument('--mode', choices=['dumpcap','scapy'], default='dumpcap')
+		parser.add_argument('--mode', choices=['dumpcap','scapy','airodump'], default='airodump')
 		parser.add_argument('--endpoint', required=False)
 		parser.add_argument('--pidfile', required=False)
 		parser.add_argument('--daemon', action='store_true', default=False, dest="daemon")
