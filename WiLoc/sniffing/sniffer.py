@@ -111,7 +111,7 @@ def start_sniffing(endpoint, mode=None, context=None):
 				start_time = time.time()
 				new_enabled = api.is_enabled(device_id)
 
-				hop()
+				# hop()
 
 				if new_enabled is not enabled:
 					logging.info(('Enabling' if new_enabled else 'Disabling') + ' sniffer.')
