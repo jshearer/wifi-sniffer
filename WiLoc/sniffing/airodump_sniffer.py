@@ -60,10 +60,10 @@ class STDInPcapReader(STDInRawPcapReader):
 		return self.read_packet(size)
 
 def sniff_me(monitor, queue):
-	call(['rm', '-f', monitor['mon']+"-capture.cap"])
+	call(['rm', '-f', monitor['mon']+"-capture-01.cap"])
 	airodump_proc = Popen(['airodump-ng', '--output-format', 'pcap', '-w', monitor['mon']+"-capture", monitor['mon']], stdout=DEVNULL, stderr=DEVNULL)
 	time.sleep(1)
-	with open(monitor['mon']+"-capture.cap", 'r') as capture_file:
+	with open(monitor['mon']+"-capture-01.cap", 'r') as capture_file:
 		reader = STDInPcapReader(capture_file)
 
 		pkt = reader.read_packet()
